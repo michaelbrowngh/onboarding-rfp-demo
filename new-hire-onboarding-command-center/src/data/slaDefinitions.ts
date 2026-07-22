@@ -1,28 +1,4 @@
+import slaDefinitionsData from './slaDefinitions.json'
 import type { SlaDefinition } from '../domain/onboarding'
 
-export const slaDefinitions: SlaDefinition[] = [
-  {
-    id: 'kpi-01',
-    label: 'Background Check: Initiate',
-    windowHours: 24,
-    targetPercent: 99,
-  },
-  {
-    id: 'kpi-04',
-    label: 'Employment Contract / Agreement Given',
-    windowHours: 48,
-    targetPercent: 95,
-  },
-  {
-    id: 'kpi-06',
-    label: 'Start Date: Options Given',
-    windowHours: 24,
-    targetPercent: 99,
-  },
-  {
-    id: 'kpi-08',
-    label: 'MPH (Manage Pending Hire)',
-    windowHours: 48,
-    targetPercent: 99,
-  },
-]
+export const slaDefinitions = slaDefinitionsData as SlaDefinition[]
