@@ -1,0 +1,29 @@
+:root {
+  --page-bg: #f5efe4;
+  --canvas-bg: rgba(255, 251, 246, 0.82);
+  --panel-bg: rgba(255, 255, 255, 0.82);
+  --panel-strong: #fffaf2;
+  --surface-outline: rgba(58, 45, 31, 0.12);
+  --surface-outline-strong: rgba(58, 45, 31, 0.2);
+  --text-primary: #2d241a;
+  --text-secondary: #5d5245;
+  --text-muted: #7c7064;
+  --critical-bg: #fce7db;
+  --critical-border: #c65f38;
+  --action-bg: #fff1cb;
+  --action-border: #b27b00;
+  --warning-bg: #e9f1df;
+  --warning-border: #58743f;
+  --track-bg: #ddeef0;
+  --track-border: #2f7181;
+  --button-bg: #2d241a;
+  --button-text: #fdf7f0;
+  --shadow-lg: 0 24px 60px rgba(71, 50, 21, 0.14);
+  --shadow-md: 0 14px 26px rgba(71, 50, 21, 0.1);
+  --radius-xl: 28px;
+  --radius-lg: 18px;
+  --radius-md: 14px;
+  --radius-sm: 999px;
+  --font-sans: 'Segoe UI', 'Aptos', system-ui, sans-serif;
+  --font-display: Georgia, 'Times New Roman', serif;
+}

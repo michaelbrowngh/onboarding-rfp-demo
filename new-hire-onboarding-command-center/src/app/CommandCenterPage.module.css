@@ -1,0 +1,45 @@
+.pageShell {
+  min-height: 100vh;
+  padding: 28px;
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.6), transparent 28%),
+    linear-gradient(180deg, #f9f3ea 0%, #efe2cd 100%);
+}
+
+.backdrop {
+  width: min(1440px, 100%);
+  min-height: 844px;
+  margin: 0 auto;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.88fr) minmax(320px, 0.72fr);
+  gap: 20px;
+  border: 1px solid var(--surface-outline);
+  border-radius: 36px;
+  background: var(--canvas-bg);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-lg);
+}
+
+.commandCenterColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+}
+
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (max-width: 1200px) {
+  .pageShell {
+    padding: 18px;
+  }
+
+  .backdrop {
+    grid-template-columns: 1fr;
+  }
+}

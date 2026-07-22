@@ -1,0 +1,132 @@
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: 16px;
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  background: var(--panel-strong);
+  border: 1px solid var(--surface-outline);
+}
+
+.rowMain {
+  min-width: 0;
+}
+
+.titleRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.name {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--text-primary);
+}
+
+.stepBadge,
+.severityBadge {
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--surface-outline-strong);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.stepBadge {
+  background: #f2eee8;
+  color: var(--text-secondary);
+}
+
+.severityBadge[data-queue='critical'] {
+  background: var(--critical-bg);
+  border-color: var(--critical-border);
+}
+
+.severityBadge[data-queue='action-required'] {
+  background: var(--action-bg);
+  border-color: var(--action-border);
+}
+
+.severityBadge[data-queue='warning'] {
+  background: var(--warning-bg);
+  border-color: var(--warning-border);
+}
+
+.severityBadge[data-queue='on-track'] {
+  background: var(--track-bg);
+  border-color: var(--track-border);
+}
+
+.statusLine,
+.riskReason {
+  margin: 10px 0 0;
+  color: var(--text-secondary);
+}
+
+.riskReason {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.metaGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 14px 0 0;
+}
+
+.metaGrid dt,
+.signalList {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.metaGrid dd {
+  margin: 4px 0 0;
+  color: var(--text-primary);
+}
+
+.rowAside {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.signalList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  background: #f6f3ec;
+  border: 1px dashed var(--surface-outline-strong);
+}
+
+.actionButton {
+  width: 100%;
+  padding: 12px 14px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--button-bg);
+  color: var(--button-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.actionButton:focus-visible {
+  outline: 3px solid #6d8aa3;
+  outline-offset: 3px;
+}
+
+@media (max-width: 940px) {
+  .row {
+    grid-template-columns: 1fr;
+  }
+
+  .metaGrid {
+    grid-template-columns: 1fr;
+  }
+}

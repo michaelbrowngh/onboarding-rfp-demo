@@ -1,0 +1,73 @@
+.sidecar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 22px;
+  border-radius: var(--radius-xl);
+  background: #2e261f;
+  color: #f7efe5;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--shadow-lg);
+}
+
+.shellHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #cbb8a2;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.35rem;
+  color: #fff7ed;
+}
+
+.statusPill {
+  align-self: flex-start;
+  padding: 7px 10px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.08);
+  color: #f5dec1;
+}
+
+.panel,
+.panelMuted {
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.panelMuted {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.panelTitle {
+  margin: 0 0 10px;
+  font-size: 0.95rem;
+  color: #fff7ed;
+}
+
+.summary {
+  margin: 0;
+  line-height: 1.6;
+  color: #eadfd0;
+}
+
+.actionList {
+  margin: 0;
+  padding-left: 18px;
+  color: #f3e7d9;
+}
+
+.actionList li + li {
+  margin-top: 8px;
+}
