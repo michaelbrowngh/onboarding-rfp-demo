@@ -1,0 +1,49 @@
+.section {
+  padding: 18px;
+  border-radius: var(--radius-xl);
+  background: var(--panel-bg);
+  border: 1px solid var(--surface-outline);
+  box-shadow: var(--shadow-md);
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--text-primary);
+}
+
+.description {
+  margin: 6px 0 0;
+  max-width: 64ch;
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+}
+
+.countBadge {
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  background: #f0f7ff;
+  color: var(--text-secondary);
+  border: 1px solid var(--surface-outline-strong);
+  white-space: nowrap;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (max-width: 800px) {
+  .sectionHeader {
+    flex-direction: column;
+  }
+}
