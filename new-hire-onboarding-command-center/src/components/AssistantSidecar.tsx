@@ -1,14 +1,14 @@
 import { useMemo, useState } from 'react'
-import { createPortal } from 'react-dom'
 import type { AssistantContext } from '../domain/onboarding'
 import styles from './AssistantSidecar.module.css'
 
 interface AssistantSidecarProps {
   context: AssistantContext
+  isOpen: boolean
+  onToggle: () => void
 }
 
-export function AssistantSidecar({ context }: AssistantSidecarProps) {
-  const [isOpen, setIsOpen] = useState(false)
+export function AssistantSidecar({ context, isOpen, onToggle }: AssistantSidecarProps) {
   const [draft, setDraft] = useState('')
   const [messages, setMessages] = useState<string[]>([
     context.summary,
@@ -43,19 +43,15 @@ export function AssistantSidecar({ context }: AssistantSidecarProps) {
     setDraft('')
   }
 
-  if (typeof document === 'undefined') {
-    return null
-  }
-
-  return createPortal(
-    <div className={styles.floatingContainer}>
+  return (
+    <div className={styles.sidecarColumn}>
       <button
         type="button"
-        className={styles.launcherButton}
+        className={`${styles.launcherButton} ${styles.launcherFixed}`}
         aria-expanded={isOpen}
         aria-controls={panelId}
         aria-label={isOpen ? 'Close assistant' : 'Open assistant'}
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={onToggle}
       >
         <span className={styles.iconBubble} aria-hidden="true">
           <svg viewBox="0 0 24 24" focusable="false">
@@ -123,7 +119,6 @@ export function AssistantSidecar({ context }: AssistantSidecarProps) {
           </div>
         </div>
       </aside>
-    </div>,
-    document.body,
+    </div>
   )
 }

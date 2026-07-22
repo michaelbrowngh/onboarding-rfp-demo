@@ -1,0 +1,133 @@
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 8px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.queuePressure {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  border-radius: var(--radius-md);
+  background: var(--panel-strong);
+  border: 1px solid var(--surface-outline);
+}
+
+.pressureStat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.7rem;
+}
+
+.pressureLabel {
+  color: var(--text-muted);
+}
+
+.pressureValue {
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.kpiCard {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background 150ms ease, border-color 150ms ease;
+}
+
+.kpiCard:hover {
+  background: var(--canvas-bg);
+  border-color: var(--surface-outline);
+}
+
+.kpiCardCompact {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.kpiLabel {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kpiValue {
+  font-size: 1.15rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.kpiPill {
+  font-size: 0.6rem;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.kpiPill[data-risk="critical"] {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.kpiPill[data-risk="warning"] {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+.kpiPill[data-risk="on-track"] {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.kpiExpanded {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--surface-outline);
+}
+
+.kpiExpandedRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+}
+
+.summaryBlock {
+  margin-top: auto;
+  padding: 10px;
+  border-radius: var(--radius-md);
+  font-size: 0.7rem;
+  line-height: 1.45;
+  background: var(--panel-strong);
+  border: 1px solid var(--surface-outline);
+}
+
+.summaryLabel {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  display: block;
+}

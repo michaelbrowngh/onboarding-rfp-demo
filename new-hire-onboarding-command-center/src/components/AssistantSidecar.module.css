@@ -1,12 +1,17 @@
-.floatingContainer {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  z-index: 120;
+.sidecarColumn {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 12px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.launcherFixed {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 120;
 }
 
 .launcherButton {
@@ -59,8 +64,9 @@
 }
 
 .sidecar {
-  width: min(388px, calc(100vw - 40px));
-  max-height: calc(100vh - 120px);
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -274,13 +280,8 @@
 }
 
 @media (max-width: 640px) {
-  .floatingContainer {
+  .launcherFixed {
     right: 12px;
     bottom: 12px;
-  }
-
-  .sidecar {
-    width: min(360px, calc(100vw - 24px));
-    max-height: calc(100vh - 88px);
   }
 }

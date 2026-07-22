@@ -1,11 +1,66 @@
+/* Base row — shared chrome */
 .row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 220px;
-  gap: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
   padding: 16px;
   border-radius: var(--radius-lg);
   background: var(--panel-strong);
   border: 1px solid var(--surface-outline);
+  cursor: pointer;
+}
+
+/* Compact state: single-line bar */
+.rowCompact {
+  padding: 10px 14px;
+  min-height: 48px;
+  align-items: center;
+}
+
+/* Expanded state: restore two-column grid layout */
+.rowExpanded {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  gap: 8px;
+}
+
+/* Compact inner layout: name+badges left */
+.compactMain {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+/* Compact aside: SLA chip + button right */
+.compactAside {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* SLA chip inside compact row */
+.slaChip {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  background: var(--canvas-bg);
+  border: 1px solid var(--surface-outline);
+}
+
+/* Expanded detail content */
+.expandedContent {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: 16px;
+  margin-top: 10px;
 }
 
 .rowMain {
@@ -106,8 +161,7 @@
 }
 
 .actionButton {
-  width: 100%;
-  padding: 12px 14px;
+  padding: 8px 14px;
   border: 0;
   border-radius: var(--radius-md);
   background: var(--button-bg);
@@ -122,7 +176,7 @@
 }
 
 @media (max-width: 940px) {
-  .row {
+  .expandedContent {
     grid-template-columns: 1fr;
   }
 

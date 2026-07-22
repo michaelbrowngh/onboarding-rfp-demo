@@ -1,5 +1,6 @@
 .pageShell {
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   padding: 28px;
   background:
     radial-gradient(circle at 12% 8%, rgba(0, 120, 212, 0.2), transparent 30%),
@@ -9,12 +10,10 @@
 
 .backdrop {
   width: min(1440px, 100%);
-  min-height: 844px;
+  height: calc(100vh - 56px);
   margin: 0 auto;
   padding: 24px;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
+  overflow: hidden;
   border: 1px solid var(--surface-outline);
   border-radius: 36px;
   background: var(--canvas-bg);
@@ -22,25 +21,44 @@
   box-shadow: var(--shadow-lg);
 }
 
-.commandCenterColumn {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  min-width: 0;
+.layout {
+  display: grid;
+  grid-template-columns: 220px 1fr 0px;
+  grid-template-rows: 1fr;
+  gap: 16px;
+  height: calc(100% - 0px);
+  transition: grid-template-columns 0.3s ease;
+  overflow: hidden;
 }
 
-.sections {
+.layoutSidecarOpen {
+  grid-template-columns: 220px 1fr 400px;
+}
+
+.mainColumn {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
+  min-width: 0;
+  overflow: hidden;
+  height: 100%;
+}
+
+.sidecarColumn {
+  overflow: hidden;
+  height: 100%;
+}
+
+.sectionsScroll {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  flex: 1;
 }
 
 @media (max-width: 1200px) {
   .pageShell {
     padding: 18px;
-  }
-
-  .backdrop {
-    grid-template-columns: 1fr;
   }
 }
