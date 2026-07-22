@@ -19,7 +19,7 @@ The dashboard itself must show status, risk, and next action immediately. The as
 
 ## 2. HVE Execution Contract
 
-Treat this file and the approved BRD as the source of truth.
+Treat this file, the approved BRD, and the BRD addendum as the source of truth.
 
 Use the HVE Research-Plan-Implement workflow:
 
@@ -47,7 +47,7 @@ Required:
   - Candidates - Action Required
   - Candidates - Warning / Flags
 - Candidate rows with visible next actions.
-- Docked assistant shell on the right.
+- Floating assistant launcher at the bottom-left that expands into the assistant panel.
 - Synthetic deterministic data.
 
 Not required:
@@ -100,7 +100,7 @@ The supplied stakeholder mockup is the layout reference. It shows:
 2. A top KPI band with two or more compact metrics.
 3. An AI summary directly below or inside the KPI band.
 4. Three stacked candidate sections.
-5. A right-side docked assistant.
+5. A floating assistant launcher at the bottom-left that expands into a panel.
 6. A visible Refresh action.
 
 Recommended 1440 x 900 grid:
@@ -125,7 +125,7 @@ Recommended 1440 x 900 grid:
 +----------------------------------------------------------------------------------+
 ```
 
-Use approximately 72-76% of the width for the command center and 24-28% for the assistant.
+Use approximately 100% of the width for the command center content area. The assistant is a floating overlay that does not reserve a permanent column.
 
 The P0 screen should not resemble a spreadsheet. Use concise cards or rows, clear labels, whitespace, and status badges.
 
@@ -135,8 +135,7 @@ The P0 screen should not resemble a spreadsheet. Use concise cards or rows, clea
 
 Show:
 
-- `New Hire Onboarding Operations Command Center`
-- `Prototype - Synthetic data`
+- `New Hire Onboarding Command Center`
 - `Last refreshed: <time>`
 - `Refresh` button
 - Optional compact selector for region or time period
@@ -163,13 +162,13 @@ Use the supplied KPI catalogue as the baseline configuration.
 
 ### P0 KPI presentation
 
-Display only the most useful four to six items above the fold. Each KPI can show:
+Display eight KPI cards above the fold. Each KPI card must show:
 
 - Current-month performance.
 - Target.
 - Count currently near SLA.
 - Count projected to miss.
-- Small status indicator.
+- A visible status indicator (`On track`, `Watch closely`, or `Critical risk`).
 
 Prominently show total candidates in the pipeline and the number approaching or projected to miss SLA. Monthly compliance percentages can be visually smaller.
 
@@ -323,8 +322,9 @@ The sidecar is visible in P0 and interactive in P1.
 
 ### Visual behavior
 
-- Dock on the right.
-- Keep the command center visible.
+- Anchor a launcher button at the bottom-left of the viewport.
+- Expand a floating assistant panel when the launcher is activated.
+- Keep the command center visible while the panel overlays the page.
 - Header: `Onboarding Operations Assistant`.
 - Label: `Demo simulation`.
 - Show selected candidate and issue category.
@@ -458,6 +458,7 @@ new-hire-onboarding-command-center/
 ├─ docs/
 │  ├─ requirements/
 │  │  ├─ business-requirements.docx
+│  │  ├─ business-requirements-addendum.md
 │  │  └─ build-specification.md
 │  ├─ images/
 │  │  └─ command-center-concept-mockup.png
@@ -508,7 +509,7 @@ Do not build candidate detail, routing, services, state stores, or charts until 
 - On Track: green plus icon/text.
 - Compact KPI cards.
 - High information density without spreadsheet styling.
-- Right-side assistant feels integrated but visually distinct.
+- Floating assistant panel feels integrated but visually distinct.
 - Do not communicate status through color alone.
 
 The blue rectangles in the supplied mockup indicate hierarchy and placement, not final component styling.
@@ -533,11 +534,11 @@ The blue rectangles in the supplied mockup indicate hierarchy and placement, not
 The screenshot build is complete when:
 
 - The page renders at 1440 x 900 without clipping or scrolling in the primary screenshot state.
-- KPI band, AI KPI summary, Critical, Action Required, Warning / Flags, Refresh, and sidecar are visible.
+- KPI band, AI KPI summary, Critical, Action Required, Warning / Flags, Refresh, and assistant launcher are visible.
+- The KPI band shows exactly eight KPI cards and each card includes a visible status indicator.
 - Each candidate row shows Candidate, Step, Status, Description, and Next Step.
 - The dataset contains at least two critical, two action-required, two warning, and one on-track case.
 - KPI values and candidate stories are internally consistent.
-- The page displays `Prototype - Synthetic data`.
 - No real integrations, PII, secrets, or production URLs exist.
 - `npm run build` succeeds.
 
@@ -583,7 +584,7 @@ P1 additional:
 Select **Task Researcher** and run:
 
 ```text
-/task-research topic="Research the simplest React, TypeScript, and Vite implementation for the New Hire Onboarding Operations Command Center described in docs/requirements/build-specification.md. The first milestone is one screenshot-ready 1440x900 screen with a KPI band, AI KPI summary, three stacked candidate-priority sections, Refresh action, and a docked assistant shell. Survey the current repository, recommend component boundaries, local data structures, risk-rule configuration, prompt-building approach, accessibility treatment, and minimal dependencies. Do not implement code. Do not recommend a backend, authentication, real AI model, or external HR integration."
+/task-research topic="Research the simplest React, TypeScript, and Vite implementation for the New Hire Onboarding Operations Command Center described in docs/requirements/build-specification.md. The first milestone is one screenshot-ready 1440x900 screen with a KPI band, AI KPI summary, three stacked candidate-priority sections, Refresh action, and a floating assistant launcher that expands a sidecar panel. Survey the current repository, recommend component boundaries, local data structures, risk-rule configuration, prompt-building approach, accessibility treatment, and minimal dependencies. Do not implement code. Do not recommend a backend, authentication, real AI model, or external HR integration."
 ```
 
 ### Plan
@@ -599,7 +600,7 @@ Select **Task Planner** and run:
 Select **Task Implementor** and run:
 
 ```text
-/task-implement phaseStop=true Implement Phase 1 of the approved command-center plan. Build only the 1440x900 screenshot state with synthetic data, KPI band, AI KPI summary, Critical, Action Required, Warning / Flags sections, Refresh control, and docked assistant shell. Stop after the phase, run type check/tests/build, and wait for review before adding interactions.
+/task-implement phaseStop=true Implement Phase 1 of the approved command-center plan. Build only the 1440x900 screenshot state with synthetic data, KPI band, AI KPI summary, Critical, Action Required, Warning / Flags sections, Refresh control, and a floating assistant launcher that expands the sidecar panel. Stop after the phase, run type check/tests/build, and wait for review before adding interactions.
 ```
 
 ---
@@ -613,15 +614,14 @@ Create a concise implementation plan for P0 only. Do not build the entire future
 
 P0 must be one screenshot-ready React + TypeScript + Vite screen at 1440x900 with:
 - command-center header
-- Prototype - Synthetic data label
 - last refresh and Refresh button
-- compact monthly KPI band
+- compact monthly KPI band with eight KPI cards
 - AI KPI summary
 - Candidates - Critical section
 - Candidates - Action Required section
 - Candidates - Warning / Flags section
 - candidate rows showing Candidate, Step, Status, Description, Next Step, and action
-- docked assistant shell on the right
+- floating bottom-left assistant launcher that expands the sidecar panel
 
 Use local deterministic mock data. Do not create a backend, authentication, real agent, real email, source-system update, candidate detail drawer, or unnecessary routing.
 

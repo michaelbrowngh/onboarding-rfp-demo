@@ -1,8 +1,8 @@
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: 20px;
+  align-items: stretch;
+  gap: 28px;
   padding: 24px 26px;
   border-radius: var(--radius-xl);
   background: var(--panel-bg);
@@ -20,10 +20,13 @@
 
 .title {
   margin: 0;
-  max-width: 16ch;
+  max-width: none;
   font-family: var(--font-display);
-  font-size: 2.5rem;
-  line-height: 1;
+  font-size: clamp(2rem, 2.9vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.018em;
+  line-height: 1.03;
+  white-space: nowrap;
   color: var(--text-primary);
 }
 
@@ -34,7 +37,6 @@
   margin-top: 14px;
 }
 
-.prototypeBadge,
 .periodChip {
   padding: 8px 12px;
   border-radius: var(--radius-sm);
@@ -42,13 +44,8 @@
   border: 1px solid var(--surface-outline-strong);
 }
 
-.prototypeBadge {
-  background: #f5ead4;
-  color: #6b4c15;
-}
-
 .periodChip {
-  background: #f4f4ef;
+  background: #f4f9ff;
   color: var(--text-secondary);
 }
 
@@ -56,6 +53,8 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  justify-content: flex-start;
+  min-width: 260px;
   gap: 12px;
 }
 
@@ -76,7 +75,7 @@
 }
 
 .refreshButton:focus-visible {
-  outline: 3px solid #6d8aa3;
+  outline: 3px solid #86beef;
   outline-offset: 3px;
 }
 

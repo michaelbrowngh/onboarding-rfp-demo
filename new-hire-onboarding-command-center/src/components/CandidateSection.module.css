@@ -30,7 +30,7 @@
 .countBadge {
   padding: 8px 12px;
   border-radius: var(--radius-sm);
-  background: #f5f1e7;
+  background: #f0f7ff;
   color: var(--text-secondary);
   border: 1px solid var(--surface-outline-strong);
   white-space: nowrap;

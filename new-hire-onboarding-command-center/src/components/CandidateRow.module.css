@@ -35,7 +35,7 @@
 }
 
 .stepBadge {
-  background: #f2eee8;
+  background: #eff6ff;
   color: var(--text-secondary);
 }
 
@@ -101,7 +101,7 @@
   gap: 6px;
   padding: 12px;
   border-radius: var(--radius-md);
-  background: #f6f3ec;
+  background: #f4f9ff;
   border: 1px dashed var(--surface-outline-strong);
 }
 
@@ -117,7 +117,7 @@
 }
 
 .actionButton:focus-visible {
-  outline: 3px solid #6d8aa3;
+  outline: 3px solid #86beef;
   outline-offset: 3px;
 }
 

@@ -16,6 +16,20 @@ const riskLabels = {
 export function KpiBand({ kpis, atRiskCount, projectedMissCount }: KpiBandProps) {
   return (
     <section className={styles.band} aria-label="Monthly onboarding KPIs">
+      <aside className={styles.aggregatePanel} aria-label="Aggregate risk counts">
+        <p className={styles.aggregateLabel}>Current queue pressure</p>
+        <div className={styles.aggregateGrid}>
+          <div>
+            <span className={styles.aggregateValue}>{atRiskCount}</span>
+            <span className={styles.aggregateCaption}>Approaching SLA</span>
+          </div>
+          <div>
+            <span className={styles.aggregateValue}>{projectedMissCount}</span>
+            <span className={styles.aggregateCaption}>Projected misses</span>
+          </div>
+        </div>
+      </aside>
+
       <div className={styles.summaryCards}>
         {kpis.map((kpi) => (
           <article key={kpi.id} className={styles.card}>
@@ -43,20 +57,6 @@ export function KpiBand({ kpis, atRiskCount, projectedMissCount }: KpiBandProps)
           </article>
         ))}
       </div>
-
-      <aside className={styles.aggregatePanel} aria-label="Aggregate risk counts">
-        <p className={styles.aggregateLabel}>Current queue pressure</p>
-        <div className={styles.aggregateGrid}>
-          <div>
-            <span className={styles.aggregateValue}>{atRiskCount}</span>
-            <span className={styles.aggregateCaption}>Approaching SLA</span>
-          </div>
-          <div>
-            <span className={styles.aggregateValue}>{projectedMissCount}</span>
-            <span className={styles.aggregateCaption}>Projected misses</span>
-          </div>
-        </div>
-      </aside>
     </section>
   )
 }

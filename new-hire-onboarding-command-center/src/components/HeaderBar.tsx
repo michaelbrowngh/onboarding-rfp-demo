@@ -10,9 +10,8 @@ export function HeaderBar({ lastRefreshLabel, reportingPeriod }: HeaderBarProps)
     <header className={styles.header}>
       <div>
         <p className={styles.eyebrow}>Onboarding Operations Workspace</p>
-        <h1 className={styles.title}>New Hire Onboarding Operations Command Center</h1>
+        <h1 className={styles.title}>New Hire Onboarding Command Center</h1>
         <div className={styles.metaRow}>
-          <span className={styles.prototypeBadge}>Prototype - Synthetic data</span>
           <span className={styles.periodChip}>{reportingPeriod}</span>
         </div>
       </div>

@@ -24,7 +24,7 @@ const queueDescriptions = {
 
 const assistantContext: AssistantContext = {
   heading: 'Assistant readiness snapshot',
-  status: 'Synthetic context loaded',
+  status: '',
   summary:
     'Joe Brown and Aisha Khan are driving immediate risk. The top pattern is initiation work that missed an ownership handoff during preboarding, followed by one contract case with a start date inside the critical threshold.',
   suggestedActions: [
@@ -32,8 +32,7 @@ const assistantContext: AssistantContext = {
     'Compare whether Joe Brown should keep the current start date.',
     'Draft a clarification email for Elena Petrova and recruiting.',
   ],
-  guardrailNote:
-    'This sidecar is a static prototype shell in Phase 1. No prompts are sent and no system writes occur.',
+  guardrailNote: '',
 }
 
 function filterCandidates(queue: CandidateCase['queueCategory']) {
