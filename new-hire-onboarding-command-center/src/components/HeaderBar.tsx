@@ -2,25 +2,19 @@ import styles from './HeaderBar.module.css'
 
 interface HeaderBarProps {
   lastRefreshLabel: string
-  reportingPeriod: string
 }
 
-export function HeaderBar({ lastRefreshLabel, reportingPeriod }: HeaderBarProps) {
+export function HeaderBar({ lastRefreshLabel }: HeaderBarProps) {
   return (
     <header className={styles.header}>
-      <div>
-        <p className={styles.eyebrow}>Onboarding Operations Workspace</p>
+      <div className={styles.headerContent}>
         <h1 className={styles.title}>New Hire Onboarding Command Center</h1>
-        <div className={styles.metaRow}>
-          <span className={styles.periodChip}>{reportingPeriod}</span>
+        <div className={styles.actions}>
+          <p className={styles.refreshLabel}>Last refreshed: {lastRefreshLabel}</p>
+          <button type="button" className={styles.refreshButton}>
+            Refresh
+          </button>
         </div>
-      </div>
-
-      <div className={styles.actions}>
-        <p className={styles.refreshLabel}>Last refreshed: {lastRefreshLabel}</p>
-        <button type="button" className={styles.refreshButton}>
-          Refresh Snapshot
-        </button>
       </div>
     </header>
   )

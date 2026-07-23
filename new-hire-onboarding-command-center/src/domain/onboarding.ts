@@ -1,6 +1,18 @@
 export type QueueCategory = 'critical' | 'action-required' | 'warning' | 'on-track'
 
-export type ActionMode = 'automation' | 'assistant' | 'none'
+// 'automation' = the web app performs the action directly (no assistant involved).
+// 'ai-action' = a prompt is generated and submitted to the assistant, which executes the task.
+// 'ai-review' = a prompt is generated in the assistant composer for the user to review/send.
+// 'none' = no action is needed.
+export type ActionMode = 'automation' | 'ai-action' | 'ai-review' | 'none'
+
+export interface FollowUpStep {
+  id: string
+  label: string
+  status: 'pending' | 'executing' | 'completed'
+  draftEmail?: string
+  completedAt?: Date
+}
 
 export interface KpiSnapshot {
   id: string
@@ -8,6 +20,9 @@ export interface KpiSnapshot {
   shortLabel: string
   compliancePercent: number
   targetPercent: number
+  slaWindowHours: number
+  nearSlaPercentThreshold: number
+  onTrackCount: number
   nearSlaCount: number
   projectedMissCount: number
   trendLabel: string
@@ -42,6 +57,7 @@ export interface CandidateCase {
   waitingOnHuman: boolean
   negativeSentiment: boolean
   badgeLabel: string
+  actionDetail: string
 }
 
 export interface AssistantContext {

@@ -2,7 +2,7 @@
   {
     "id": "case-001",
     "candidateName": "Joseph Brown",
-    "actionMode": "assistant",
+    "actionMode": "ai-action",
     "phase": "Pre-Start Date and HR Handoff",
     "stepNumber": 21,
     "stepLabel": "Contract Creation",
@@ -18,12 +18,13 @@
     "hasBlockingPrerequisite": true,
     "waitingOnHuman": true,
     "negativeSentiment": false,
-    "badgeLabel": "Step 21"
+    "badgeLabel": "Step 21",
+    "actionDetail": "Drafts a contract and right-to-work follow-up email, then sends it to Joseph automatically."
   },
   {
     "id": "case-002",
     "candidateName": "Aisha Khan",
-    "actionMode": "automation",
+    "actionMode": "ai-review",
     "phase": "Preboarding Checks",
     "stepNumber": 5,
     "stepLabel": "Background Check Initiation",
@@ -39,19 +40,20 @@
     "hasBlockingPrerequisite": false,
     "waitingOnHuman": false,
     "negativeSentiment": false,
-    "badgeLabel": "Step 05"
+    "badgeLabel": "Step 05",
+    "actionDetail": "Opens a chat to review why the background-check vendor workflow stalled and confirm next steps."
   },
   {
     "id": "case-003",
     "candidateName": "Miguel Santos",
-    "actionMode": "assistant",
+    "actionMode": "automation",
     "phase": "Pre-Start Date and HR Handoff",
     "stepNumber": 18,
     "stepLabel": "Start Date Confirmation",
     "statusLabel": "Hiring manager offered two start-date options; candidate has not confirmed.",
     "severityLabel": "Action Required",
     "riskReason": "Operations needs to decide whether to hold the original cohort date or propose a revised start.",
-    "nextStep": "Review options with the assistant and prepare a manager-ready recommendation.",
+    "nextStep": "Confirm new start date across three systems",
     "startDateLabel": "Starts in 5 days",
     "slaHoursRemaining": 10,
     "slaWindowHours": 48,
@@ -60,12 +62,13 @@
     "hasBlockingPrerequisite": false,
     "waitingOnHuman": true,
     "negativeSentiment": false,
-    "badgeLabel": "Step 18"
+    "badgeLabel": "Step 18",
+    "actionDetail": "Synchronizes the confirmed start date across ATS, HRIS, and CRM."
   },
   {
     "id": "case-004",
     "candidateName": "Priya Raman",
-    "actionMode": "assistant",
+    "actionMode": "ai-review",
     "phase": "Onboarding 2.0",
     "stepNumber": 14,
     "stepLabel": "NHDR Initiation",
@@ -81,12 +84,13 @@
     "hasBlockingPrerequisite": false,
     "waitingOnHuman": true,
     "negativeSentiment": false,
-    "badgeLabel": "Step 14"
+    "badgeLabel": "Step 14",
+    "actionDetail": "Opens a chat to review the pending re-hire approval and NHDR initiation packet."
   },
   {
     "id": "case-005",
     "candidateName": "Elena Petrova",
-    "actionMode": "assistant",
+    "actionMode": "ai-review",
     "phase": "Ticket Tracking Control",
     "stepNumber": 3,
     "stepLabel": "CRM Assignment Validation",
@@ -102,12 +106,13 @@
     "hasBlockingPrerequisite": false,
     "waitingOnHuman": false,
     "negativeSentiment": true,
-    "badgeLabel": "Step 03"
+    "badgeLabel": "Step 03",
+    "actionDetail": "Opens a chat to review unresolved document questions and negative sentiment signals."
   },
   {
     "id": "case-006",
     "candidateName": "Daniel Okafor",
-    "actionMode": "automation",
+    "actionMode": "ai-review",
     "phase": "Preboarding Checks",
     "stepNumber": 9,
     "stepLabel": "Immigration Case Review",
@@ -123,7 +128,8 @@
     "hasBlockingPrerequisite": false,
     "waitingOnHuman": false,
     "negativeSentiment": false,
-    "badgeLabel": "Step 09"
+    "badgeLabel": "Step 09",
+    "actionDetail": "Opens a chat to review the stale immigration vendor ticket and escalation options."
   },
   {
     "id": "case-007",
@@ -144,6 +150,7 @@
     "hasBlockingPrerequisite": false,
     "waitingOnHuman": false,
     "negativeSentiment": false,
-    "badgeLabel": "Step 30"
+    "badgeLabel": "Step 30",
+    "actionDetail": "No action needed. All pre-start milestones are on schedule."
   }
 ]

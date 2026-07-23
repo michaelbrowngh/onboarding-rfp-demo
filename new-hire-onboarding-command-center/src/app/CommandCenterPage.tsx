@@ -1,8 +1,7 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { candidateCases } from '../data/candidateCases'
 import {
   DEMO_LAST_REFRESH_LABEL,
-  DEMO_REPORTING_PERIOD,
 } from '../data/demoDate'
 import { kpiSnapshots } from '../data/kpiSnapshots'
 import type { AssistantContext, CandidateCase } from '../domain/onboarding'
@@ -11,10 +10,9 @@ import { CandidateSection } from '../components/CandidateSection'
 import { HeaderBar } from '../components/HeaderBar'
 import KpiRail from '../components/KpiRail'
 import styles from './CommandCenterPage.module.css'
-import { summarizeKpiRisk } from '../utils/riskRules'
 
 const AI_KPI_SUMMARY =
-  '12 candidates are approaching an SLA threshold. Background-check initiation is the largest current risk, driven by six cases waiting on candidate data and three stale CRM assignments.'
+  '9 candidates are approaching an SLA threshold. Background-check initiation is the largest current risk, with 2 cases near the 24h window and 1 projected miss.'
 
 const queueDescriptions = {
   critical:
@@ -44,21 +42,55 @@ function filterCandidates(queue: CandidateCase['queueCategory']) {
 
 export function CommandCenterPage() {
   const [sidecarOpen, setSidecarOpen] = useState(false)
+  const [selectedCandidate, setSelectedCandidate] = useState<CandidateCase | undefined>(undefined)
+  const [pendingAction, setPendingAction] = useState<
+    { candidateId: string; mode: 'ai-action' | 'ai-review'; requestId: number } | undefined
+  >(undefined)
+  const [completionBanner, setCompletionBanner] = useState<string | undefined>(undefined)
+  const requestIdRef = useRef(0)
 
   const criticalCases = filterCandidates('critical')
   const actionRequiredCases = filterCandidates('action-required')
   const warningCases = filterCandidates('warning')
-  const riskSummary = summarizeKpiRisk(kpiSnapshots)
+
+  const handleCandidateAction = (candidate: CandidateCase, mode: 'ai-action' | 'ai-review') => {
+    requestIdRef.current += 1
+    setSelectedCandidate(candidate)
+    setSidecarOpen(true)
+    setPendingAction({ candidateId: candidate.id, mode, requestId: requestIdRef.current })
+  }
+
+  const handleAutomationComplete = (candidate: CandidateCase) => {
+    setCompletionBanner(`${candidate.candidateName}: ${candidate.actionDetail}`)
+  }
+
+  const handleBackToGeneral = () => {
+    setSelectedCandidate(undefined)
+  }
 
   return (
     <main className={styles.pageShell}>
+      {completionBanner && (
+        <div className={styles.completionBanner} role="status">
+          <span className={styles.completionBannerIcon} aria-hidden="true">
+            ✓
+          </span>
+          <span className={styles.completionBannerText}>{completionBanner}</span>
+          <button
+            type="button"
+            className={styles.completionBannerClose}
+            onClick={() => setCompletionBanner(undefined)}
+            aria-label="Dismiss confirmation"
+          >
+            ×
+          </button>
+        </div>
+      )}
       <div className={styles.backdrop}>
         <div className={`${styles.layout} ${sidecarOpen ? styles.layoutSidecarOpen : ''}`}>
           {/* Column 1: KPI Rail */}
           <KpiRail
             kpis={kpiSnapshots}
-            atRiskCount={riskSummary.atRisk}
-            projectedMissCount={riskSummary.projectedMiss}
             summary={AI_KPI_SUMMARY}
           />
 
@@ -66,23 +98,28 @@ export function CommandCenterPage() {
           <div className={styles.mainColumn}>
             <HeaderBar
               lastRefreshLabel={DEMO_LAST_REFRESH_LABEL}
-              reportingPeriod={DEMO_REPORTING_PERIOD}
             />
             <div className={styles.sectionsScroll}>
               <CandidateSection
                 title="Candidates - Critical"
                 description={queueDescriptions.critical}
                 candidates={criticalCases}
+                onCandidateAction={handleCandidateAction}
+                onAutomationComplete={handleAutomationComplete}
               />
               <CandidateSection
                 title="Candidates - Action Required"
                 description={queueDescriptions['action-required']}
                 candidates={actionRequiredCases}
+                onCandidateAction={handleCandidateAction}
+                onAutomationComplete={handleAutomationComplete}
               />
               <CandidateSection
                 title="Candidates - Warning / Flags"
                 description={queueDescriptions.warning}
                 candidates={warningCases}
+                onCandidateAction={handleCandidateAction}
+                onAutomationComplete={handleAutomationComplete}
               />
             </div>
           </div>
@@ -93,6 +130,9 @@ export function CommandCenterPage() {
               context={assistantContext}
               isOpen={sidecarOpen}
               onToggle={() => setSidecarOpen((p) => !p)}
+              selectedCandidate={selectedCandidate}
+              onBackToGeneral={handleBackToGeneral}
+              pendingAction={pendingAction}
             />
           </div>
         </div>
