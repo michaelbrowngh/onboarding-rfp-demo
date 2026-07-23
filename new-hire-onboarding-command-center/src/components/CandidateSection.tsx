@@ -6,9 +6,17 @@ interface CandidateSectionProps {
   title: string
   description: string
   candidates: CandidateCase[]
+  onCandidateAction?: (candidate: CandidateCase, mode: 'ai-action' | 'ai-review') => void
+  onAutomationComplete?: (candidate: CandidateCase) => void
 }
 
-export function CandidateSection({ title, description, candidates }: CandidateSectionProps) {
+export function CandidateSection({
+  title,
+  description,
+  candidates,
+  onCandidateAction,
+  onAutomationComplete,
+}: CandidateSectionProps) {
   return (
     <section className={styles.section} aria-labelledby={title}>
       <header className={styles.sectionHeader}>
@@ -23,7 +31,12 @@ export function CandidateSection({ title, description, candidates }: CandidateSe
 
       <div className={styles.rows}>
         {candidates.map((candidate) => (
-          <CandidateRow key={candidate.id} candidate={candidate} />
+          <CandidateRow
+            key={candidate.id}
+            candidate={candidate}
+            onCandidateAction={(mode) => onCandidateAction?.(candidate, mode)}
+            onAutomationComplete={onAutomationComplete}
+          />
         ))}
       </div>
     </section>

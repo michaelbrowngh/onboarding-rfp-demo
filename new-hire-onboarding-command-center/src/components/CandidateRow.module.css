@@ -1,173 +1,124 @@
-/* Base row — shared chrome */
+/* Base row */
 .row {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  padding: 16px;
-  border-radius: var(--radius-lg);
+  flex-direction: column;
+  gap: 0;
+  padding: 7px 10px;
+  border-radius: var(--radius-md);
   background: var(--panel-strong);
   border: 1px solid var(--surface-outline);
   cursor: pointer;
+  transition: filter 150ms ease;
 }
 
-/* Compact state: single-line bar */
-.rowCompact {
-  padding: 10px 14px;
-  min-height: 48px;
-  align-items: center;
+.row:hover {
+  filter: brightness(0.97);
 }
 
-/* Expanded state: restore two-column grid layout */
-.rowExpanded {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: start;
-  gap: 8px;
-}
-
-/* Compact inner layout: name+badges left */
-.compactMain {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-  flex: 1;
-}
-
-/* Compact aside: SLA chip + button right */
-.compactAside {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-/* SLA chip inside compact row */
-.slaChip {
-  font-size: 0.68rem;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: var(--radius-sm);
-  white-space: nowrap;
-  background: var(--canvas-bg);
-  border: 1px solid var(--surface-outline);
-}
-
-/* Expanded detail content */
-.expandedContent {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 220px;
-  gap: 16px;
-  margin-top: 10px;
-}
-
-.rowMain {
-  min-width: 0;
-}
-
-.titleRow {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-}
-
-.name {
-  margin: 0;
-  font-size: 1.05rem;
-  color: var(--text-primary);
-}
-
-.stepBadge,
-.severityBadge {
-  padding: 6px 10px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--surface-outline-strong);
-  font-size: 0.78rem;
-  font-weight: 600;
-}
-
-.stepBadge {
-  background: #eff6ff;
-  color: var(--text-secondary);
-}
-
-.severityBadge[data-queue='critical'] {
+/* Queue-category coloring */
+.row[data-queue='critical'] {
   background: var(--critical-bg);
   border-color: var(--critical-border);
 }
-
-.severityBadge[data-queue='action-required'] {
+.row[data-queue='action-required'] {
   background: var(--action-bg);
   border-color: var(--action-border);
 }
-
-.severityBadge[data-queue='warning'] {
+.row[data-queue='warning'] {
   background: var(--warning-bg);
   border-color: var(--warning-border);
 }
-
-.severityBadge[data-queue='on-track'] {
+.row[data-queue='on-track'] {
   background: var(--track-bg);
   border-color: var(--track-border);
 }
 
-.statusLine,
-.riskReason {
-  margin: 10px 0 0;
+.rowExpanded {
+  gap: 6px;
+}
+
+/* Always-visible header: name+badge stacked left, summary/next middle, button right */
+.rowHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rowHeaderLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 150px;
+  flex: 0 0 150px;
+}
+
+.name {
+  margin: 0;
+  max-width: 100%;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stepBadge {
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--surface-outline-strong);
+  font-size: 0.58rem;
+  font-weight: 600;
+  background: #eff6ff;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+/* Compact 2-line detail block, fills space between name and button */
+.compactDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+}
+
+.compactSummary,
+.compactNext {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.compactNext {
   color: var(--text-secondary);
 }
 
-.riskReason {
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.metaGrid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  margin: 14px 0 0;
-}
-
-.metaGrid dt,
-.signalList {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-}
-
-.metaGrid dd {
-  margin: 4px 0 0;
-  color: var(--text-primary);
-}
-
-.rowAside {
+/* Action button group: action button + info affordance, right-aligned */
+.actionGroup {
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.signalList {
-  display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 6px;
-  padding: 12px;
-  border-radius: var(--radius-md);
-  background: #f4f9ff;
-  border: 1px dashed var(--surface-outline-strong);
+  flex-shrink: 0;
+  margin-left: auto;
+  position: relative;
 }
 
 .actionButton {
-  padding: 8px 14px;
+  padding: 5px 10px;
   border: 0;
   border-radius: var(--radius-md);
-  background: var(--button-bg);
-  color: var(--button-text);
   font: inherit;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .actionButton:focus-visible {
@@ -175,12 +126,88 @@
   outline-offset: 3px;
 }
 
-@media (max-width: 940px) {
-  .expandedContent {
-    grid-template-columns: 1fr;
-  }
+/* "Take Action" - performed directly by the web app, no assistant involved */
+.actionButtonAutomation {
+  background: var(--track-border);
+  color: var(--button-text);
+}
 
-  .metaGrid {
+.actionButtonAutomation:disabled {
+  cursor: default;
+}
+
+.actionButtonDone {
+  background: var(--track-bg);
+  color: var(--track-border);
+  border: 1px solid var(--track-border);
+}
+
+/* "Take Action with AI" - prompt is generated and submitted automatically */
+.actionButtonAiAction {
+  background: var(--button-bg);
+  color: var(--button-text);
+}
+
+/* "Review with AI" - prompt is generated for the user to review and send */
+.actionButtonAiReview {
+  background: var(--accent-purple);
+  color: var(--button-text);
+}
+
+.chatIconInline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+}
+
+/* Expanded detail block, styled to match KpiRail's expanded panel */
+.expandedContent {
+  margin-top: 6px;
+  padding: 8px 10px;
+  border: 1px solid var(--surface-outline);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.expandedFields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+}
+
+.expandedField {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.timelineValue {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.fieldLabel {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.fieldValue {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+@media (max-width: 640px) {
+  .expandedFields {
     grid-template-columns: 1fr;
   }
 }
+
