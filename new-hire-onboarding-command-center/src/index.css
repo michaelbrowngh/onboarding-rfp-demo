@@ -40,7 +40,7 @@ button {
 }
 
 button:focus-visible {
-  outline: 3px solid #86beef;
+  outline: 3px solid var(--focus-ring);
   outline-offset: 2px;
 }
 
@@ -51,4 +51,16 @@ p,
 dl,
 dd {
   margin: 0;
+}
+
+/* Hide the up/down (and left/right) scrollbar arrow buttons Chromium renders on Windows,
+   keeping just the draggable thumb for a cleaner, more modern scrollbar. */
+*::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+* {
+  scrollbar-width: thin;
 }

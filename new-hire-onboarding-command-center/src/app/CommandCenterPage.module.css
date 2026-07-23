@@ -1,21 +1,78 @@
 .pageShell {
   height: 100vh;
   overflow: hidden;
-  padding: 28px;
+  padding: 16px;
   background:
-    radial-gradient(circle at 12% 8%, rgba(0, 120, 212, 0.2), transparent 30%),
-    radial-gradient(circle at 86% 15%, rgba(0, 95, 184, 0.14), transparent 32%),
-    linear-gradient(180deg, #f7fbff 0%, #e9f2fc 100%);
+    radial-gradient(circle at 12% 8%, color-mix(in srgb, var(--brand-mid) 20%, transparent), transparent 30%),
+    radial-gradient(circle at 86% 15%, color-mix(in srgb, var(--brand-strong) 14%, transparent), transparent 32%),
+    linear-gradient(180deg, var(--panel-strong) 0%, #e9f2fc 100%);
+}
+
+.completionBanner {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: min(1440px, calc(100% - 32px));
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--track-bg);
+  color: var(--track-border);
+  border: 1px solid var(--track-border);
+  box-shadow: var(--shadow-lg);
+}
+
+.completionBannerIcon {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--track-border) 16%, transparent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.completionBannerText {
+  flex: 1;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.completionBannerClose {
+  border: 0;
+  background: transparent;
+  color: var(--track-border);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.completionBannerClose:hover {
+  background: color-mix(in srgb, var(--track-border) 12%, transparent);
+}
+
+.completionBannerClose:focus-visible {
+  outline: 2px solid var(--track-border);
+  outline-offset: 1px;
 }
 
 .backdrop {
   width: min(1440px, 100%);
   height: calc(100vh - 56px);
   margin: 0 auto;
-  padding: 24px;
+  padding: 14px;
   overflow: hidden;
   border: 1px solid var(--surface-outline);
-  border-radius: 36px;
+  border-radius: 16px;
   background: var(--canvas-bg);
   backdrop-filter: blur(12px);
   box-shadow: var(--shadow-lg);
@@ -25,7 +82,7 @@
   display: grid;
   grid-template-columns: 220px 1fr 0px;
   grid-template-rows: 1fr;
-  gap: 16px;
+  gap: 10px;
   height: calc(100% - 0px);
   transition: grid-template-columns 0.3s ease;
   overflow: hidden;
@@ -38,7 +95,7 @@
 .mainColumn {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
   min-width: 0;
   overflow: hidden;
   height: 100%;
@@ -52,13 +109,13 @@
 .sectionsScroll {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
   overflow-y: auto;
   flex: 1;
 }
 
 @media (max-width: 1200px) {
   .pageShell {
-    padding: 18px;
+    padding: 10px;
   }
 }
