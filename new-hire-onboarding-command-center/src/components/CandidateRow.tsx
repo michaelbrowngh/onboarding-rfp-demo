@@ -131,7 +131,7 @@ export function CandidateRow({ candidate, onCandidateAction, onAutomationComplet
               aria-label="Take Action with AI"
             >
               <span className={styles.chatIconInline}>{sparkleIconSvg}</span>
-              Take Action with AI
+              Action with AI
             </button>
           )}
 

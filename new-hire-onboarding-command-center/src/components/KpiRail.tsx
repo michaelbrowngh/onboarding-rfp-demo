@@ -24,6 +24,15 @@ export default function KpiRail({ kpis, summary }: KpiRailProps) {
 
   return (
     <div className={styles.rail}>
+      <div className={styles.headingBlock}>
+        <span className={styles.headingLabel}>KPI Overview</span>
+      </div>
+
+      <div className={styles.summaryBlock}>
+        <span className={styles.summaryLabel}>AI Summary</span>
+        <p className={styles.summaryText}>{summary}</p>
+      </div>
+
       {kpis.map((kpi) => {
         const totalCandidates = kpi.onTrackCount + kpi.nearSlaCount + kpi.projectedMissCount
 
@@ -71,11 +80,6 @@ export default function KpiRail({ kpis, summary }: KpiRailProps) {
           </div>
         )
       })}
-
-      <div className={styles.summaryBlock}>
-        <span className={styles.summaryLabel}>AI Summary</span>
-        <p className={styles.summaryText}>{summary}</p>
-      </div>
     </div>
   )
 }

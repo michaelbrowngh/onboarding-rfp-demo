@@ -7,6 +7,20 @@
   overflow-y: auto;
 }
 
+.headingBlock {
+  padding: 4px 10px 6px;
+  border-bottom: 1px solid var(--surface-outline);
+  margin-bottom: 2px;
+}
+
+.headingLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text-primary);
+  display: block;
+}
+
 .kpiCard {
   display: flex;
   flex-direction: column;
@@ -127,9 +141,9 @@
 }
 
 .summaryBlock {
-  margin-top: auto;
-  padding: 8px 10px 0;
-  border-top: 1px solid var(--surface-outline);
+  padding: 6px 10px 8px;
+  border-bottom: 1px solid var(--surface-outline);
+  margin-bottom: 2px;
 }
 
 .summaryLabel {
