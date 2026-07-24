@@ -1,0 +1,116 @@
+[
+  {
+    "id": "joseph-brown",
+    "heading": "New Hire Onboarding Portal",
+    "welcome": "Welcome, Joseph Brown",
+    "lastUpdated": "21 Jul 2026, 09:15 UTC",
+    "completionPercent": 78,
+    "progressLabel": "You're making great progress!",
+    "currentStage": "Pre-Start Activities",
+    "currentStageStep": "Step 2 of 5",
+    "tentativeStartDate": "Tue, Aug 5, 2026",
+    "daysUntilStart": "In 15 days",
+    "quickLinks": [
+      "My Checklist",
+      "Documents",
+      "Company Information",
+      "Training & Resources",
+      "Frequently Asked Questions"
+    ],
+    "checklist": [
+      {
+        "id": "employment-contract",
+        "label": "Employment Contract",
+        "status": "missing"
+      },
+      {
+        "id": "identity-verification",
+        "label": "Identity Verification",
+        "status": "missing"
+      },
+      {
+        "id": "medical-check",
+        "label": "Medical Check",
+        "status": "missing"
+      },
+      {
+        "id": "background-check",
+        "label": "Background Check",
+        "status": "completed"
+      },
+      {
+        "id": "equipment-preferences",
+        "label": "Equipment Preferences",
+        "status": "in-progress"
+      }
+    ],
+    "supportContact": {
+      "name": "Sarah Johnson",
+      "role": "Onboarding HR Partner",
+      "avatarPath": "/images/sarah_johnson.png",
+      "avatarAlt": "Portrait of Sarah Johnson",
+      "email": "sarah.johnson@contoso.com",
+      "teamsLabel": "Chat with Sarah in Teams",
+      "availability": "Mon - Fri, 8:00 AM - 5:00 PM PT"
+    },
+    "upcomingTasks": [
+      {
+        "id": "task-medical",
+        "title": "Complete Medical Check Form",
+        "dueLabel": "Due Jul 24, 2026",
+        "status": "overdue"
+      },
+      {
+        "id": "task-contract",
+        "title": "Submit Employment Contract",
+        "dueLabel": "Due Jul 28, 2026",
+        "status": "due-soon"
+      },
+      {
+        "id": "task-orientation",
+        "title": "Pre-Start Orientation",
+        "dueLabel": "Jul 31, 2026 - 10:00 AM PT",
+        "status": "upcoming"
+      }
+    ],
+    "chatSeedMessages": [
+      {
+        "author": "assistant",
+        "text": "Hello Joseph! I'm your AI onboarding assistant. I can help with your progress, required documents, tasks, and connect you with the right people.",
+        "timeLabel": "9:15 AM"
+      },
+      {
+        "author": "user",
+        "text": "What is my status?",
+        "timeLabel": "9:16 AM"
+      },
+      {
+        "author": "assistant",
+        "text": "You are in Pre-Start Activities and currently 78% complete. Your tentative start date is Aug 5.",
+        "timeLabel": "9:16 AM"
+      }
+    ],
+    "chatIntentRules": [
+      {
+        "id": "status",
+        "keywords": ["status", "progress", "where am i"],
+        "response": "Current status: Pre-Start Activities, 78% complete. Your start date window is close, so the top priority is resolving your missing contract and right-to-work verification."
+      },
+      {
+        "id": "missing",
+        "keywords": ["missing", "what am i missing", "blocker", "documents"],
+        "response": "You still need to complete your employment contract, right-to-work/identity verification, and medical check form."
+      },
+      {
+        "id": "medical",
+        "keywords": ["medical", "clinic", "health"],
+        "response": "For your medical check, provide your preferred clinic location, availability, and any required health documentation listed in your checklist."
+      },
+      {
+        "id": "contact",
+        "keywords": ["hr", "contact", "help", "sarah", "support"],
+        "response": "Your onboarding HR partner is Sarah Johnson. You can contact her by email at sarah.johnson@contoso.com or via Teams chat."
+      }
+    ]
+  }
+]
