@@ -60,6 +60,7 @@ export function CommandCenterPage() {
   const criticalCases = withPromotedAction(filterCandidates('critical'))
   const actionRequiredCases = withPromotedAction(filterCandidates('action-required'))
   const warningCases = withPromotedAction(filterCandidates('warning'))
+  const allCases = [...criticalCases, ...actionRequiredCases, ...warningCases]
 
   const handleCandidateAction = (candidate: CandidateCase, mode: 'ai-action' | 'ai-review') => {
     requestIdRef.current += 1
@@ -105,6 +106,8 @@ export function CommandCenterPage() {
           <KpiRail
             kpis={kpiSnapshots}
             summary={AI_KPI_SUMMARY}
+            candidates={allCases}
+            onCandidateAction={handleCandidateAction}
           />
 
           {/* Column 2: Main content */}
