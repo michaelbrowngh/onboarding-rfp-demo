@@ -1,0 +1,164 @@
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px 5px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.headingBlock {
+  padding: 4px 10px 6px;
+  border-bottom: 1px solid var(--surface-outline);
+  margin-bottom: 2px;
+}
+
+.headingLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text-primary);
+  display: block;
+}
+
+.kpiCard {
+  display: flex;
+  flex-direction: column;
+  padding: 6px 8px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background 150ms ease, border-color 150ms ease;
+}
+
+.kpiCard:hover {
+  background: var(--canvas-bg);
+  border-color: var(--surface-outline);
+}
+
+.kpiCardCompact {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.kpiBottomRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.kpiLabel {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.kpiValue {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.kpiValueCritical {
+  color: var(--critical-border);
+}
+
+.kpiValueWarning {
+  color: var(--warning-border);
+}
+
+.kpiValueOnTrack {
+  color: var(--track-border);
+}
+
+.targetDisplay {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.kpiCompactNote {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  line-height: 1.3;
+  flex: 1;
+  min-width: 0;
+}
+
+.nearSlaHighlight {
+  color: #ba7f21;
+  font-weight: 600;
+}
+
+.kpiExpanded {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+  padding: 8px;
+  border: 1px solid var(--surface-outline);
+  border-radius: var(--radius-md);
+}
+
+.equationBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.equationRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.65rem;
+}
+
+.equationLabel {
+  color: var(--text-muted);
+  flex: 1;
+}
+
+.equationValue,
+.equationTotal {
+  font-weight: 400;
+  font-size: 0.7rem;
+}
+
+.equationTotal {
+  color: var(--text-primary);
+}
+
+.equationDivider {
+  height: 1px;
+  background: var(--surface-outline);
+  margin: 2px 0;
+}
+
+.summaryBlock {
+  padding: 6px 10px 8px;
+  border-bottom: 1px solid var(--surface-outline);
+  margin-bottom: 2px;
+}
+
+.summaryLabel {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.summaryText {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin: 0;
+}

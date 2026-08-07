@@ -1,0 +1,213 @@
+/* Base row */
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 7px 10px;
+  border-radius: var(--radius-md);
+  background: var(--panel-strong);
+  border: 1px solid var(--surface-outline);
+  cursor: pointer;
+  transition: filter 150ms ease;
+}
+
+.row:hover {
+  filter: brightness(0.97);
+}
+
+/* Queue-category coloring */
+.row[data-queue='critical'] {
+  background: var(--critical-bg);
+  border-color: var(--critical-border);
+}
+.row[data-queue='action-required'] {
+  background: var(--action-bg);
+  border-color: var(--action-border);
+}
+.row[data-queue='warning'] {
+  background: var(--warning-bg);
+  border-color: var(--warning-border);
+}
+.row[data-queue='on-track'] {
+  background: var(--track-bg);
+  border-color: var(--track-border);
+}
+
+.rowExpanded {
+  gap: 6px;
+}
+
+/* Always-visible header: name+badge stacked left, summary/next middle, button right */
+.rowHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rowHeaderLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 150px;
+  flex: 0 0 150px;
+}
+
+.name {
+  margin: 0;
+  max-width: 100%;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stepBadge {
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--surface-outline-strong);
+  font-size: 0.58rem;
+  font-weight: 600;
+  background: #eff6ff;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+/* Compact 2-line detail block, fills space between name and button */
+.compactDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+}
+
+.compactSummary,
+.compactNext {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.compactNext {
+  color: var(--text-secondary);
+}
+
+/* Action button group: action button + info affordance, right-aligned */
+.actionGroup {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  margin-left: auto;
+  position: relative;
+}
+
+.actionButton {
+  padding: 5px 10px;
+  border: 0;
+  border-radius: var(--radius-md);
+  font: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.actionButton:focus-visible {
+  outline: 3px solid #86beef;
+  outline-offset: 3px;
+}
+
+/* "Take Action" - performed directly by the web app, no assistant involved */
+.actionButtonAutomation {
+  background: var(--track-border);
+  color: var(--button-text);
+}
+
+.actionButtonAutomation:disabled {
+  cursor: default;
+}
+
+.actionButtonDone {
+  background: var(--track-bg);
+  color: var(--track-border);
+  border: 1px solid var(--track-border);
+}
+
+/* "Take Action with AI" - prompt is generated and submitted automatically */
+.actionButtonAiAction {
+  background: var(--button-bg);
+  color: var(--button-text);
+}
+
+/* "Review with AI" - prompt is generated for the user to review and send */
+.actionButtonAiReview {
+  background: var(--accent-purple);
+  color: var(--button-text);
+}
+
+.chatIconInline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+}
+
+/* Expanded detail block, styled to match KpiRail's expanded panel */
+.expandedContent {
+  margin-top: 6px;
+  padding: 8px 10px;
+  border: 1px solid var(--surface-outline);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.expandedFields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+}
+
+.expandedField {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.timelineValue {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.fieldLabel {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.fieldValue {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+@media (max-width: 640px) {
+  .expandedFields {
+    grid-template-columns: 1fr;
+  }
+}
+

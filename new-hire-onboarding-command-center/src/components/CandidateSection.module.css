@@ -1,0 +1,55 @@
+.section {
+  padding: 10px;
+  border-radius: var(--radius-xl);
+  background: var(--panel-bg);
+  border: 1px solid var(--surface-outline);
+  box-shadow: var(--shadow-md);
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.title {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.description {
+  margin: 2px 0 0;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.countBadge {
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  background: #eff6ff;
+  color: var(--text-secondary);
+  border: 1px solid var(--surface-outline-strong);
+  white-space: nowrap;
+  font-size: 0.65rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+@media (max-width: 800px) {
+  .sectionHeader {
+    flex-direction: column;
+  }
+}
