@@ -17,6 +17,7 @@ interface AssistantSidecarProps {
   selectedCandidate?: CandidateCase
   onBackToGeneral?: () => void
   pendingAction?: { candidateId: string; mode: 'ai-action' | 'ai-review'; requestId: number }
+  onReviewPlanConfirmed?: (candidateId: string) => void
 }
 
 interface ChatMessage {
@@ -179,6 +180,7 @@ export function AssistantSidecar({
   selectedCandidate,
   onBackToGeneral,
   pendingAction,
+  onReviewPlanConfirmed,
 }: AssistantSidecarProps) {
   const [draft, setDraft] = useState('')
   const [messages, setMessages] = useState<ChatMessage[]>([])
@@ -186,12 +188,21 @@ export function AssistantSidecar({
   const [draftReview, setDraftReview] = useState<DraftReview | undefined>(undefined)
   const [reviewPromptPending, setReviewPromptPending] = useState(false)
   const [progressCollapsed, setProgressCollapsed] = useState(false)
+  const [day1PlanConfirmed, setDay1PlanConfirmed] = useState(false)
 
   const chatMode = selectedCandidate ? 'candidate-specific' : 'general'
 
   const panelId = 'assistant-floating-panel'
 
   const canSend = draft.trim().length > 0
+  const isDay1ReviewCase = selectedCandidate?.id === 'case-010'
+  const hasAssistantGuidance = messages.some((message) => message.role === 'assistant')
+  const showDay1ConfirmAction =
+    chatMode === 'candidate-specific' &&
+    isDay1ReviewCase &&
+    hasAssistantGuidance &&
+    !day1PlanConfirmed &&
+    followUpSteps.length === 0
 
   const pushMessage = (role: ChatMessage['role'], text: string) => {
     const id = nextMessageId()
@@ -205,6 +216,7 @@ export function AssistantSidecar({
     setDraftReview(undefined)
     setReviewPromptPending(false)
     setProgressCollapsed(false)
+    setDay1PlanConfirmed(false)
   }
 
   // Starting a new candidate-specific conversation (or returning to general) begins with a clean slate.
@@ -214,7 +226,18 @@ export function AssistantSidecar({
     setDraftReview(undefined)
     setReviewPromptPending(false)
     setProgressCollapsed(false)
+    setDay1PlanConfirmed(false)
   }, [selectedCandidate?.id])
+
+  const handleConfirmDay1Plan = () => {
+    if (!selectedCandidate) return
+    setDay1PlanConfirmed(true)
+    onReviewPlanConfirmed?.(selectedCandidate.id)
+    pushMessage(
+      'assistant',
+      `Plan confirmed. ${selectedCandidate.candidateName} is now ready for **Action with AI** in the queue to execute stakeholder communication and downstream updates.`
+    )
+  }
 
   // Once every follow-up step finishes, auto-collapse the progress list down to its header.
   useEffect(() => {
@@ -589,6 +612,21 @@ export function AssistantSidecar({
               onClick={() => handleSuggestedPrompt(`Please take next follow-up action for candidate ${selectedCandidate.candidateName}.`)}
             >
               Take follow-up action
+            </button>
+          </section>
+        )}
+
+        {showDay1ConfirmAction && (
+          <section className={styles.planConfirmationCard} aria-label="Day 1 plan confirmation">
+            <p className={styles.planConfirmationText}>
+              Confirm this review plan to switch the queue action from Review with AI to Action with AI.
+            </p>
+            <button
+              type="button"
+              className={styles.planConfirmButton}
+              onClick={handleConfirmDay1Plan}
+            >
+              Confirm plan and enable Action with AI
             </button>
           </section>
         )}

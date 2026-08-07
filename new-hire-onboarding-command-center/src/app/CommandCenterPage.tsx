@@ -12,7 +12,7 @@ import KpiRail from '../components/KpiRail'
 import styles from './CommandCenterPage.module.css'
 
 const AI_KPI_SUMMARY =
-  '9 candidates are approaching an SLA threshold. Background-check initiation is the largest current risk, with 2 cases near the 24h window and 1 projected miss.'
+  '10 candidates are approaching an SLA threshold. The largest current risks are pre-check data accuracy, medical readiness before Day 1, and start-date realignment within 72 hours.'
 
 const queueDescriptions = {
   critical:
@@ -27,11 +27,11 @@ const assistantContext: AssistantContext = {
   heading: 'Assistant readiness snapshot',
   status: '',
   summary:
-    'Joe Brown and Aisha Khan are driving immediate risk. The top pattern is initiation work that missed an ownership handoff during preboarding, followed by one contract case with a start date inside the critical threshold.',
+    'Avery Collins, Nadia Ortiz, Jordan Patel, and Sofia Martinez represent the four new high-impact scenarios: pre-check accuracy, candidate experience sentiment decline, Day 1 realignment, and pre-Day 1 readiness.',
   suggestedActions: [
-    'Explain root-cause drivers for the two critical cases.',
-    'Compare whether Joe Brown should keep the current start date.',
-    'Draft a clarification email for Elena Petrova and recruiting.',
+    'Explain root-cause drivers for the pre-check accuracy and medical-readiness alerts.',
+    'Review sentiment drivers and propose the next outreach path for Jordan Patel.',
+    'Generate a stakeholder realignment sequence for Sofia Martinez.',
   ],
   guardrailNote: '',
 }
@@ -43,15 +43,23 @@ function filterCandidates(queue: CandidateCase['queueCategory']) {
 export function CommandCenterPage() {
   const [sidecarOpen, setSidecarOpen] = useState(false)
   const [selectedCandidate, setSelectedCandidate] = useState<CandidateCase | undefined>(undefined)
+  const [promotedToActionCandidates, setPromotedToActionCandidates] = useState<Record<string, true>>({})
   const [pendingAction, setPendingAction] = useState<
     { candidateId: string; mode: 'ai-action' | 'ai-review'; requestId: number } | undefined
   >(undefined)
   const [completionBanner, setCompletionBanner] = useState<string | undefined>(undefined)
   const requestIdRef = useRef(0)
 
-  const criticalCases = filterCandidates('critical')
-  const actionRequiredCases = filterCandidates('action-required')
-  const warningCases = filterCandidates('warning')
+  const withPromotedAction = (candidates: CandidateCase[]) =>
+    candidates.map((candidate) =>
+      promotedToActionCandidates[candidate.id]
+        ? { ...candidate, actionMode: 'ai-action' as const }
+        : candidate
+    )
+
+  const criticalCases = withPromotedAction(filterCandidates('critical'))
+  const actionRequiredCases = withPromotedAction(filterCandidates('action-required'))
+  const warningCases = withPromotedAction(filterCandidates('warning'))
 
   const handleCandidateAction = (candidate: CandidateCase, mode: 'ai-action' | 'ai-review') => {
     requestIdRef.current += 1
@@ -66,6 +74,11 @@ export function CommandCenterPage() {
 
   const handleBackToGeneral = () => {
     setSelectedCandidate(undefined)
+  }
+
+  const handleReviewPlanConfirmed = (candidateId: string) => {
+    setPromotedToActionCandidates((current) => ({ ...current, [candidateId]: true }))
+    setCompletionBanner('Plan confirmed. Queue action is now set to Action with AI for downstream execution.')
   }
 
   return (
@@ -133,6 +146,7 @@ export function CommandCenterPage() {
               selectedCandidate={selectedCandidate}
               onBackToGeneral={handleBackToGeneral}
               pendingAction={pendingAction}
+              onReviewPlanConfirmed={handleReviewPlanConfirmed}
             />
           </div>
         </div>
