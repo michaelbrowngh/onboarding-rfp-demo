@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { CandidateCase } from '../domain/onboarding'
 import styles from './CandidateRow.module.css'
 
@@ -6,6 +6,8 @@ interface CandidateRowProps {
   candidate: CandidateCase
   onCandidateAction?: (mode: 'ai-action' | 'ai-review') => void
   onAutomationComplete?: (candidate: CandidateCase) => void
+  isFocusTarget?: boolean
+  onFocusHandled?: () => void
 }
 
 const checkIconSvg = (
@@ -62,9 +64,27 @@ const magnifierIconSvg = (
   </svg>
 )
 
-export function CandidateRow({ candidate, onCandidateAction, onAutomationComplete }: CandidateRowProps) {
+export function CandidateRow({
+  candidate,
+  onCandidateAction,
+  onAutomationComplete,
+  isFocusTarget = false,
+  onFocusHandled,
+}: CandidateRowProps) {
   const [expanded, setExpanded] = useState(false)
   const [automationState, setAutomationState] = useState<'idle' | 'in-progress' | 'done'>('idle')
+  const rowRef = useRef<HTMLElement | null>(null)
+
+  useEffect(() => {
+    if (!isFocusTarget) {
+      return
+    }
+
+    setExpanded(true)
+    rowRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    rowRef.current?.focus()
+    onFocusHandled?.()
+  }, [isFocusTarget, onFocusHandled])
 
   const handleAutomationClick = () => {
     if (automationState !== 'idle') {
@@ -79,10 +99,12 @@ export function CandidateRow({ candidate, onCandidateAction, onAutomationComplet
 
   return (
     <article
+      ref={rowRef}
       className={`${styles.row} ${expanded ? styles.rowExpanded : ''}`}
       data-queue={candidate.queueCategory}
       onClick={() => setExpanded((p) => !p)}
       role="button"
+      tabIndex={-1}
       aria-expanded={expanded}
     >
       {/* Header: name+badge fixed-width left, summary/next middle, button right */}

@@ -8,6 +8,8 @@ interface CandidateSectionProps {
   candidates: CandidateCase[]
   onCandidateAction?: (candidate: CandidateCase, mode: 'ai-action' | 'ai-review') => void
   onAutomationComplete?: (candidate: CandidateCase) => void
+  focusedCandidateId?: string
+  onFocusHandled?: () => void
 }
 
 export function CandidateSection({
@@ -16,6 +18,8 @@ export function CandidateSection({
   candidates,
   onCandidateAction,
   onAutomationComplete,
+  focusedCandidateId,
+  onFocusHandled,
 }: CandidateSectionProps) {
   return (
     <section className={styles.section} aria-labelledby={title}>
@@ -36,6 +40,8 @@ export function CandidateSection({
             candidate={candidate}
             onCandidateAction={(mode) => onCandidateAction?.(candidate, mode)}
             onAutomationComplete={onAutomationComplete}
+            isFocusTarget={focusedCandidateId === candidate.id}
+            onFocusHandled={onFocusHandled}
           />
         ))}
       </div>
