@@ -47,6 +47,7 @@ export function CommandCenterPage() {
   const [pendingAction, setPendingAction] = useState<
     { candidateId: string; mode: 'ai-action' | 'ai-review'; requestId: number } | undefined
   >(undefined)
+  const [focusedCandidateId, setFocusedCandidateId] = useState<string | undefined>(undefined)
   const [completionBanner, setCompletionBanner] = useState<string | undefined>(undefined)
   const requestIdRef = useRef(0)
 
@@ -82,6 +83,15 @@ export function CommandCenterPage() {
     setCompletionBanner('Plan confirmed. Queue action is now set to Action with AI for downstream execution.')
   }
 
+  const handleKpiCandidateFocus = (candidate: CandidateCase) => {
+    setFocusedCandidateId(candidate.id)
+    setSelectedCandidate(candidate)
+  }
+
+  const handleCandidateFocusHandled = () => {
+    setFocusedCandidateId(undefined)
+  }
+
   return (
     <main className={styles.pageShell}>
       {completionBanner && (
@@ -107,7 +117,7 @@ export function CommandCenterPage() {
             kpis={kpiSnapshots}
             summary={AI_KPI_SUMMARY}
             candidates={allCases}
-            onCandidateAction={handleCandidateAction}
+            onCandidateFocus={handleKpiCandidateFocus}
           />
 
           {/* Column 2: Main content */}
@@ -122,6 +132,8 @@ export function CommandCenterPage() {
                 candidates={criticalCases}
                 onCandidateAction={handleCandidateAction}
                 onAutomationComplete={handleAutomationComplete}
+                focusedCandidateId={focusedCandidateId}
+                onFocusHandled={handleCandidateFocusHandled}
               />
               <CandidateSection
                 title="Candidates - Action Required"
@@ -129,6 +141,8 @@ export function CommandCenterPage() {
                 candidates={actionRequiredCases}
                 onCandidateAction={handleCandidateAction}
                 onAutomationComplete={handleAutomationComplete}
+                focusedCandidateId={focusedCandidateId}
+                onFocusHandled={handleCandidateFocusHandled}
               />
               <CandidateSection
                 title="Candidates - Warning / Flags"
@@ -136,6 +150,8 @@ export function CommandCenterPage() {
                 candidates={warningCases}
                 onCandidateAction={handleCandidateAction}
                 onAutomationComplete={handleAutomationComplete}
+                focusedCandidateId={focusedCandidateId}
+                onFocusHandled={handleCandidateFocusHandled}
               />
             </div>
           </div>

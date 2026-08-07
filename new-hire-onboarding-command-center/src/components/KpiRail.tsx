@@ -6,7 +6,7 @@ interface KpiRailProps {
   kpis: KpiSnapshot[]
   summary: string
   candidates: CandidateCase[]
-  onCandidateAction?: (candidate: CandidateCase, mode: 'ai-action' | 'ai-review') => void
+  onCandidateFocus?: (candidate: CandidateCase) => void
 }
 
 type DrilldownBucket = 'near' | 'missed'
@@ -90,7 +90,7 @@ function selectKpiCandidates(kpi: KpiSnapshot, candidates: CandidateCase[]) {
   }
 }
 
-export default function KpiRail({ kpis, summary, candidates, onCandidateAction }: KpiRailProps) {
+export default function KpiRail({ kpis, summary, candidates, onCandidateFocus }: KpiRailProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [drilldown, setDrilldown] = useState<DrilldownState | undefined>(undefined)
 
@@ -197,29 +197,24 @@ export default function KpiRail({ kpis, summary, candidates, onCandidateAction }
                     ) : (
                       <div className={styles.kpiDrilldownList}>
                         {drilldownCandidates.map((candidate) => (
-                          <article key={candidate.id} className={styles.kpiCandidateCard}>
+                          <button
+                            key={candidate.id}
+                            type="button"
+                            className={styles.kpiCandidateCard}
+                            onClick={(event) => {
+                              event.stopPropagation()
+                              onCandidateFocus?.(candidate)
+                            }}
+                          >
                             <div className={styles.kpiCandidateTop}>
                               <span className={styles.kpiCandidateName}>{candidate.candidateName}</span>
                               <span className={styles.kpiCandidateBadge}>{candidate.badgeLabel}</span>
                             </div>
                             <p className={styles.kpiCandidateRisk}>{candidate.riskReason}</p>
                             <div className={styles.kpiCandidateActions}>
-                              {candidate.actionMode === 'none' ? (
-                                <span className={styles.kpiNoAction}>No action required</span>
-                              ) : (
-                                <button
-                                  type="button"
-                                  className={styles.kpiReviewButton}
-                                  onClick={(event) => {
-                                    event.stopPropagation()
-                                    onCandidateAction?.(candidate, 'ai-review')
-                                  }}
-                                >
-                                  Review with AI
-                                </button>
-                              )}
+                              <span className={styles.kpiFocusHint}>Open candidate alert</span>
                             </div>
-                          </article>
+                          </button>
                         ))}
                       </div>
                     )}

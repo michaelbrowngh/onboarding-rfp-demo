@@ -213,6 +213,7 @@
 }
 
 .kpiCandidateCard {
+  width: 100%;
   border: 1px solid var(--surface-outline);
   border-radius: var(--radius-sm);
   background: var(--panel-bg);
@@ -220,6 +221,19 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.kpiCandidateCard:hover {
+  border-color: var(--surface-outline-strong);
+  background: var(--canvas-bg);
+}
+
+.kpiCandidateCard:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 
 .kpiCandidateTop {
@@ -238,7 +252,7 @@
 .kpiCandidateBadge {
   font-size: 0.58rem;
   color: var(--text-secondary);
-  border: 1px solid var(--surface-outline-strong);
+  border: 1px solid var(--surface-outline);
   border-radius: 999px;
   padding: 1px 6px;
 }
@@ -256,24 +270,9 @@
   justify-content: flex-end;
 }
 
-.kpiReviewButton {
-  border: 0;
-  border-radius: var(--radius-sm);
-  padding: 3px 8px;
-  background: var(--brand-strong);
-  color: #ffffff;
-  font: inherit;
+.kpiFocusHint {
   font-size: 0.58rem;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.kpiReviewButton:focus-visible {
-  outline: 2px solid var(--focus-ring);
-  outline-offset: 2px;
-}
-
-.kpiNoAction {
-  font-size: 0.58rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
