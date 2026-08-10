@@ -46,18 +46,25 @@ function isProjectedMissCandidate(candidate: CandidateCase, kpi: KpiSnapshot) {
 
 function selectKpiCandidates(kpi: KpiSnapshot, candidates: CandidateCase[]) {
   const matcher = kpiCandidateMatchers[kpi.id] ?? (() => true)
-  const scoped = candidates
+  const allSorted = [...candidates].sort((a, b) => remainingPercent(a) - remainingPercent(b))
+  const matched = candidates
     .filter(matcher)
     .sort((a, b) => remainingPercent(a) - remainingPercent(b))
+  const scoped = matched.length > 0 ? matched : allSorted
+  const projectedTarget = Math.max(0, kpi.projectedMissCount)
+  const nearTarget = Math.max(0, kpi.nearSlaCount)
 
   const projected: CandidateCase[] = []
   for (const candidate of scoped) {
+    if (projected.length >= projectedTarget) {
+      break
+    }
     if (isProjectedMissCandidate(candidate, kpi)) {
       projected.push(candidate)
     }
   }
-  for (const candidate of scoped) {
-    if (projected.length >= Math.max(1, kpi.projectedMissCount)) {
+  for (const candidate of allSorted) {
+    if (projected.length >= projectedTarget) {
       break
     }
     if (!projected.some((item) => item.id === candidate.id)) {
@@ -67,6 +74,9 @@ function selectKpiCandidates(kpi: KpiSnapshot, candidates: CandidateCase[]) {
 
   const near: CandidateCase[] = []
   for (const candidate of scoped) {
+    if (near.length >= nearTarget) {
+      break
+    }
     if (projected.some((item) => item.id === candidate.id)) {
       continue
     }
@@ -75,8 +85,8 @@ function selectKpiCandidates(kpi: KpiSnapshot, candidates: CandidateCase[]) {
       near.push(candidate)
     }
   }
-  for (const candidate of scoped) {
-    if (near.length >= Math.max(1, kpi.nearSlaCount)) {
+  for (const candidate of allSorted) {
+    if (near.length >= nearTarget) {
       break
     }
     if (!projected.some((item) => item.id === candidate.id) && !near.some((item) => item.id === candidate.id)) {
@@ -85,8 +95,8 @@ function selectKpiCandidates(kpi: KpiSnapshot, candidates: CandidateCase[]) {
   }
 
   return {
-    near: near.slice(0, Math.max(1, kpi.nearSlaCount)),
-    missed: projected.slice(0, Math.max(1, kpi.projectedMissCount)),
+    near: near.slice(0, nearTarget),
+    missed: projected.slice(0, projectedTarget),
   }
 }
 
@@ -120,6 +130,8 @@ export default function KpiRail({ kpis, summary, candidates, onCandidateFocus }:
       {kpis.map((kpi) => {
         const totalCandidates = kpi.onTrackCount + kpi.nearSlaCount + kpi.projectedMissCount
         const kpiCandidates = selectKpiCandidates(kpi, candidates)
+        const nearCandidates = kpiCandidates.near
+        const missedCandidates = kpiCandidates.missed
         const activeBucket = drilldown?.kpiId === kpi.id ? drilldown.bucket : undefined
         const drilldownCandidates = activeBucket ? kpiCandidates[activeBucket] : []
 
@@ -140,7 +152,7 @@ export default function KpiRail({ kpis, summary, candidates, onCandidateFocus }:
             </div>
             <div className={styles.kpiBottomRow}>
               <div className={styles.kpiCompactNote}>
-                <span className={styles.nearSlaHighlight}>{kpi.nearSlaCount}/{totalCandidates}</span> within {kpi.nearSlaPercentThreshold}% of SLA
+                <span className={styles.nearSlaHighlight}>{kpi.nearSlaCount}</span> out of {totalCandidates} are nearing SLA
               </div>
               <span className={styles.targetDisplay}>Target: {kpi.targetPercent}%</span>
             </div>
@@ -148,43 +160,50 @@ export default function KpiRail({ kpis, summary, candidates, onCandidateFocus }:
               <div className={styles.kpiExpanded}>
                 <div className={styles.equationBlock}>
                   <div className={styles.equationRow}>
-                    <span className={styles.equationLabel}>On-track</span>
-                    <span className={`${styles.equationValue} ${styles.kpiValueOnTrack}`}>{kpi.onTrackCount}</span>
+                    <span className={styles.equationLabel}>Active</span>
+                    <span className={styles.equationTotal}>{totalCandidates}</span>
                   </div>
                   <div className={styles.equationRow}>
                     <span className={styles.equationLabel}>Near SLA</span>
-                    <button
-                      type="button"
-                      className={`${styles.equationCountButton} ${styles.kpiValueWarning}`}
-                      onClick={(event) => {
-                        event.stopPropagation()
-                        setDrilldown({ kpiId: kpi.id, bucket: 'near' })
-                      }}
-                    >
-                      {kpi.nearSlaCount}
-                    </button>
+                    {nearCandidates.length > 0 ? (
+                      <button
+                        type="button"
+                        className={`${styles.equationCountButton} ${styles.kpiValueWarning}`}
+                        onClick={(event) => {
+                          event.stopPropagation()
+                          setDrilldown({ kpiId: kpi.id, bucket: 'near' })
+                        }}
+                      >
+                        {kpi.nearSlaCount}
+                      </button>
+                    ) : (
+                      <span className={`${styles.equationValue} ${styles.kpiValueWarning}`}>{kpi.nearSlaCount}</span>
+                    )}
                   </div>
                   <div className={styles.equationRow}>
-                    <span className={styles.equationLabel}>Missed SLA</span>
-                    <button
-                      type="button"
-                      className={`${styles.equationCountButton} ${styles.kpiValueCritical}`}
-                      onClick={(event) => {
-                        event.stopPropagation()
-                        setDrilldown({ kpiId: kpi.id, bucket: 'missed' })
-                      }}
-                    >
-                      {kpi.projectedMissCount}
-                    </button>
+                    <span className={styles.equationLabel}>Total Missed SLA</span>
+                    {missedCandidates.length > 0 ? (
+                      <button
+                        type="button"
+                        className={`${styles.equationCountButton} ${styles.kpiValueCritical}`}
+                        onClick={(event) => {
+                          event.stopPropagation()
+                          setDrilldown({ kpiId: kpi.id, bucket: 'missed' })
+                        }}
+                      >
+                        {kpi.projectedMissCount}
+                      </button>
+                    ) : (
+                      <span className={`${styles.equationValue} ${styles.kpiValueCritical}`}>{kpi.projectedMissCount}</span>
+                    )}
                   </div>
-                  <div className={styles.equationDivider} />
                   <div className={styles.equationRow}>
-                    <span className={styles.equationLabel}>Total</span>
-                    <span className={styles.equationTotal}>{totalCandidates}</span>
+                    <span className={styles.equationLabel}>Total Completed</span>
+                    <span className={`${styles.equationValue} ${styles.kpiValueOnTrack}`}>{kpi.onTrackCount}</span>
                   </div>
                 </div>
 
-                {activeBucket && (
+                {activeBucket && drilldownCandidates.length > 0 && (
                   <section
                     className={styles.kpiDrilldown}
                     aria-label={`${kpi.shortLabel} ${activeBucket === 'near' ? 'near SLA' : 'missed SLA'} candidates`}
@@ -192,32 +211,28 @@ export default function KpiRail({ kpis, summary, candidates, onCandidateFocus }:
                     <p className={styles.kpiDrilldownTitle}>
                       {activeBucket === 'near' ? 'Near SLA candidates' : 'Projected/missed SLA candidates'}
                     </p>
-                    {drilldownCandidates.length === 0 ? (
-                      <p className={styles.kpiDrilldownEmpty}>No candidates currently mapped to this KPI bucket.</p>
-                    ) : (
-                      <div className={styles.kpiDrilldownList}>
-                        {drilldownCandidates.map((candidate) => (
-                          <button
-                            key={candidate.id}
-                            type="button"
-                            className={styles.kpiCandidateCard}
-                            onClick={(event) => {
-                              event.stopPropagation()
-                              onCandidateFocus?.(candidate)
-                            }}
-                          >
-                            <div className={styles.kpiCandidateTop}>
-                              <span className={styles.kpiCandidateName}>{candidate.candidateName}</span>
-                              <span className={styles.kpiCandidateBadge}>{candidate.badgeLabel}</span>
-                            </div>
-                            <p className={styles.kpiCandidateRisk}>{candidate.riskReason}</p>
-                            <div className={styles.kpiCandidateActions}>
-                              <span className={styles.kpiFocusHint}>Open candidate alert</span>
-                            </div>
-                          </button>
-                        ))}
-                      </div>
-                    )}
+                    <div className={styles.kpiDrilldownList}>
+                      {drilldownCandidates.map((candidate) => (
+                        <button
+                          key={candidate.id}
+                          type="button"
+                          className={styles.kpiCandidateCard}
+                          onClick={(event) => {
+                            event.stopPropagation()
+                            onCandidateFocus?.(candidate)
+                          }}
+                        >
+                          <div className={styles.kpiCandidateTop}>
+                            <span className={styles.kpiCandidateName}>{candidate.candidateName}</span>
+                            <span className={styles.kpiCandidateBadge}>{candidate.badgeLabel}</span>
+                          </div>
+                          <p className={styles.kpiCandidateRisk}>{candidate.riskReason}</p>
+                          <div className={styles.kpiCandidateActions}>
+                            <span className={styles.kpiFocusHint}>Open candidate alert</span>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
                   </section>
                 )}
               </div>

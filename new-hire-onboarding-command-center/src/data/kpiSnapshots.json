@@ -1,8 +1,8 @@
 [
   {
     "id": "pipeline-total",
-    "label": "Pipeline Candidates",
-    "shortLabel": "Pipeline",
+    "label": "NHDR: Iniitiate",
+    "shortLabel": "NHDR: Iniitiate",
     "compliancePercent": 94,
     "targetPercent": 99,
     "slaWindowHours": 168,
