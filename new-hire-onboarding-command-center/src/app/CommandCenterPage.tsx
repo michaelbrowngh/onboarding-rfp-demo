@@ -36,8 +36,47 @@ const assistantContext: AssistantContext = {
   guardrailNote: '',
 }
 
+const hiddenCandidateIds = new Set<string>(['case-002'])
+
+const priorityOrderByQueue: Record<
+  CandidateCase['queueCategory'],
+  Record<string, number>
+> = {
+  critical: {
+    'Avery Collins': 0,
+    'Sofia Martinez': 1,
+    'Nadia Ortiz': 2,
+  },
+  warning: {
+    'Jordan Patel': 0,
+  },
+  'action-required': {},
+  'on-track': {},
+}
+
+function sortCandidatesByQueuePriority(
+  candidates: CandidateCase[],
+  queue: CandidateCase['queueCategory'],
+) {
+  const priority = priorityOrderByQueue[queue]
+
+  return [...candidates].sort((a, b) => {
+    const aPriority = priority[a.candidateName] ?? Number.POSITIVE_INFINITY
+    const bPriority = priority[b.candidateName] ?? Number.POSITIVE_INFINITY
+
+    if (aPriority !== bPriority) {
+      return aPriority - bPriority
+    }
+
+    return a.candidateName.localeCompare(b.candidateName)
+  })
+}
+
 function filterCandidates(queue: CandidateCase['queueCategory']) {
-  return candidateCases.filter((candidate) => candidate.queueCategory === queue)
+  return candidateCases.filter(
+    (candidate) =>
+      candidate.queueCategory === queue && !hiddenCandidateIds.has(candidate.id),
+  )
 }
 
 export function CommandCenterPage() {
@@ -54,13 +93,29 @@ export function CommandCenterPage() {
   const withPromotedAction = (candidates: CandidateCase[]) =>
     candidates.map((candidate) =>
       promotedToActionCandidates[candidate.id]
-        ? { ...candidate, actionMode: 'ai-action' as const }
+        ? {
+            ...candidate,
+            actionMode: 'ai-action' as const,
+            nextStep:
+              candidate.id === 'case-010'
+                ? 'Confirmation email has been sent and received by the stakeholders. Continue with Action with AI.'
+                : candidate.nextStep,
+          }
         : candidate
     )
 
-  const criticalCases = withPromotedAction(filterCandidates('critical'))
-  const actionRequiredCases = withPromotedAction(filterCandidates('action-required'))
-  const warningCases = withPromotedAction(filterCandidates('warning'))
+  const criticalCases = sortCandidatesByQueuePriority(
+    withPromotedAction(filterCandidates('critical')),
+    'critical',
+  )
+  const actionRequiredCases = sortCandidatesByQueuePriority(
+    withPromotedAction(filterCandidates('action-required')),
+    'action-required',
+  )
+  const warningCases = sortCandidatesByQueuePriority(
+    withPromotedAction(filterCandidates('warning')),
+    'warning',
+  )
   const allCases = [...criticalCases, ...actionRequiredCases, ...warningCases]
 
   const handleCandidateAction = (candidate: CandidateCase, mode: 'ai-action' | 'ai-review') => {
@@ -78,9 +133,9 @@ export function CommandCenterPage() {
     setSelectedCandidate(undefined)
   }
 
-  const handleReviewPlanConfirmed = (candidateId: string) => {
+  const handleDay1StakeholderEmailSent = (candidateId: string) => {
     setPromotedToActionCandidates((current) => ({ ...current, [candidateId]: true }))
-    setCompletionBanner('Plan confirmed. Queue action is now set to Action with AI for downstream execution.')
+    setCompletionBanner('Stakeholder confirmation email sent. Queue action is now set to Action with AI for downstream execution.')
   }
 
   const handleKpiCandidateFocus = (candidate: CandidateCase) => {
@@ -165,7 +220,7 @@ export function CommandCenterPage() {
               selectedCandidate={selectedCandidate}
               onBackToGeneral={handleBackToGeneral}
               pendingAction={pendingAction}
-              onReviewPlanConfirmed={handleReviewPlanConfirmed}
+              onDay1StakeholderEmailSent={handleDay1StakeholderEmailSent}
             />
           </div>
         </div>

@@ -328,7 +328,8 @@
   font: inherit;
   font-size: 0.78rem;
   resize: none;
-  max-height: 140px;
+  min-height: 64px;
+  max-height: 220px;
   overflow-y: auto;
   line-height: 1.3;
 }

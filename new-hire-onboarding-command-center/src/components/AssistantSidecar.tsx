@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import type { AssistantContext, CandidateCase, FollowUpStep } from '../domain/onboarding'
 import {
@@ -6,6 +6,7 @@ import {
   getMockCandidateResponse,
   getFollowUpCompletionResponse,
   getInitialFollowUpSteps,
+  getDay1StakeholderConfirmationSteps,
   buildCandidateReviewPrompt,
 } from '../utils/agentResponses'
 import styles from './AssistantSidecar.module.css'
@@ -17,7 +18,7 @@ interface AssistantSidecarProps {
   selectedCandidate?: CandidateCase
   onBackToGeneral?: () => void
   pendingAction?: { candidateId: string; mode: 'ai-action' | 'ai-review'; requestId: number }
-  onReviewPlanConfirmed?: (candidateId: string) => void
+  onDay1StakeholderEmailSent?: (candidateId: string) => void
 }
 
 interface ChatMessage {
@@ -180,7 +181,7 @@ export function AssistantSidecar({
   selectedCandidate,
   onBackToGeneral,
   pendingAction,
-  onReviewPlanConfirmed,
+  onDay1StakeholderEmailSent,
 }: AssistantSidecarProps) {
   const [draft, setDraft] = useState('')
   const [messages, setMessages] = useState<ChatMessage[]>([])
@@ -189,6 +190,7 @@ export function AssistantSidecar({
   const [reviewPromptPending, setReviewPromptPending] = useState(false)
   const [progressCollapsed, setProgressCollapsed] = useState(false)
   const [day1PlanConfirmed, setDay1PlanConfirmed] = useState(false)
+  const chatInputRef = useRef<HTMLTextAreaElement | null>(null)
 
   const chatMode = selectedCandidate ? 'candidate-specific' : 'general'
 
@@ -232,11 +234,37 @@ export function AssistantSidecar({
   const handleConfirmDay1Plan = () => {
     if (!selectedCandidate) return
     setDay1PlanConfirmed(true)
-    onReviewPlanConfirmed?.(selectedCandidate.id)
+
+    const steps = getDay1StakeholderConfirmationSteps()
+    setFollowUpSteps(steps)
+
+    const draftStep = steps.find((step) => step.draftEmail)
+    const sendStep = steps.find((step) => step.id !== draftStep?.id)
+
+    if (!draftStep) {
+      return
+    }
+
     pushMessage(
       'assistant',
-      `Plan confirmed. ${selectedCandidate.candidateName} is now ready for **Action with AI** in the queue to execute stakeholder communication and downstream updates.`
+      `Great. We'll run phase 1 now by drafting the stakeholder confirmation email for ${selectedCandidate.candidateName}.`
     )
+
+    void (async () => {
+      await delay(700)
+      setFollowUpSteps((current) =>
+        current.map((step) => (step.id === draftStep.id ? { ...step, status: 'executing' as const } : step))
+      )
+      await delay(900)
+      setFollowUpSteps((current) =>
+        current.map((step) =>
+          step.id === draftStep.id ? { ...step, status: 'completed' as const, completedAt: new Date() } : step
+        )
+      )
+
+      const messageId = pushMessage('assistant', draftStep.draftEmail!)
+      setDraftReview({ messageId, sendStepId: sendStep?.id ?? '', text: draftStep.draftEmail!, mode: 'review' })
+    })()
   }
 
   // Once every follow-up step finishes, auto-collapse the progress list down to its header.
@@ -246,10 +274,21 @@ export function AssistantSidecar({
     }
   }, [followUpSteps])
 
+  useEffect(() => {
+    const input = chatInputRef.current
+    if (!input) {
+      return
+    }
+
+    input.style.height = 'auto'
+    input.style.height = `${input.scrollHeight}px`
+  }, [draft])
+
   const executeFollowUpAction = async () => {
     if (!selectedCandidate) return
 
     const steps = getInitialFollowUpSteps(selectedCandidate)
+    setProgressCollapsed(false)
     setFollowUpSteps(steps)
 
     const draftStep = steps.find((step) => step.draftEmail)
@@ -320,6 +359,10 @@ export function AssistantSidecar({
     const completion = getFollowUpCompletionResponse(selectedCandidate, 'email')
     await delay(completion.delayMs)
     pushMessage('assistant', completion.text)
+
+    if (selectedCandidate.id === 'case-010' && day1PlanConfirmed) {
+      onDay1StakeholderEmailSent?.(selectedCandidate.id)
+    }
   }
 
   const handleEditDraft = () => {
@@ -491,7 +534,7 @@ export function AssistantSidecar({
                           className={styles.draftAcceptButton}
                           onClick={() => void handleAcceptDraft()}
                         >
-                          Accept
+                          Send email
                         </button>
                         <button type="button" className={styles.draftEditButton} onClick={handleEditDraft}>
                           Edit
@@ -618,15 +661,12 @@ export function AssistantSidecar({
 
         {showDay1ConfirmAction && (
           <section className={styles.planConfirmationCard} aria-label="Day 1 plan confirmation">
-            <p className={styles.planConfirmationText}>
-              Confirm this review plan to switch the queue action from Review with AI to Action with AI.
-            </p>
             <button
               type="button"
               className={styles.planConfirmButton}
               onClick={handleConfirmDay1Plan}
             >
-              Confirm plan and enable Action with AI
+              Confirm start date with Stakeholders
             </button>
           </section>
         )}
@@ -635,12 +675,13 @@ export function AssistantSidecar({
           <div className={styles.inputRow}>
             <textarea
               id="assistant-chat-input"
+              ref={chatInputRef}
               className={styles.chatInput}
               value={draft}
               spellCheck={false}
               onChange={(event) => setDraft(event.target.value)}
               placeholder="Type your question"
-              rows={1}
+              rows={3}
             />
             <button
               type="button"

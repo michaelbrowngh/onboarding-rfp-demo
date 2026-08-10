@@ -130,12 +130,8 @@ export function getMockCandidateResponse(
     if (candidate.id === 'case-010') {
       const text =
         `**${candidate.candidateName}** requires a Day 1 realignment plan with guided execution.\n\n` +
-        `**Proposed multi-step resolution:**\n` +
-        `1. Draft stakeholder realignment email for recruiting, HR, and manager approval.\n` +
-        `2. Send approved stakeholder communication and capture acknowledgements.\n` +
-        `3. Notify the candidate once the realigned date is confirmed.\n` +
-        `4. Update downstream systems: CRM, SuccessFactors, EC, and Payroll.\n\n` +
-        `Confirm this plan to enable **Action with AI** in the queue and run the execution steps.`
+        `Phase 1: Confirm the new start date with stakeholders.\n` +
+        `\nPhase 2: Once confirmed, exectute **Action with AI** for downstream system updates.`
       return { text, delayMs: 850 }
     }
 
@@ -155,6 +151,13 @@ export function getMockCandidateResponse(
 
   // Take follow-up action (will trigger step UI separately)
   if (normalizedPrompt.includes('follow-up') || normalizedPrompt.includes('action')) {
+    if (candidate.id === 'case-012') {
+      return {
+        text: `${candidate.candidateName} has an incorrect IBAN format. We're going to send an email to get the new IBAN value. Here is an email draft:`,
+        delayMs: 600,
+      }
+    }
+
     return {
       text: `I'll help you with the next steps for **${candidate.candidateName}**. Starting now…`,
       delayMs: 600,
@@ -255,38 +258,52 @@ Onboarding Operations`,
 export function getDay1RealignmentExecutionSteps(): FollowUpStep[] {
   return [
     {
-      id: 'step-1-stakeholder-draft',
-      label: 'Draft stakeholder realignment email (Recruiting, HR, Hiring Manager)',
-      status: 'pending' as const,
-    },
-    {
-      id: 'step-2-stakeholder-send',
-      label: 'Send approved stakeholder email and log acknowledgements',
-      status: 'pending' as const,
-    },
-    {
-      id: 'step-3-candidate-inform',
-      label: 'Inform candidate of the confirmed realigned start date',
-      status: 'pending' as const,
-    },
-    {
-      id: 'step-4-crm',
+      id: 'step-1-crm',
       label: 'Update CRM record',
       status: 'pending' as const,
     },
     {
-      id: 'step-5-successfactors',
+      id: 'step-2-successfactors',
       label: 'Update SuccessFactors record',
       status: 'pending' as const,
     },
     {
-      id: 'step-6-ec',
+      id: 'step-3-ec',
       label: 'Update EC record',
       status: 'pending' as const,
     },
     {
-      id: 'step-7-payroll',
+      id: 'step-4-payroll',
       label: 'Update Payroll record',
+      status: 'pending' as const,
+    },
+  ]
+}
+
+export function getDay1StakeholderConfirmationSteps(): FollowUpStep[] {
+  return [
+    {
+      id: 'step-1-stakeholder-confirmation-draft',
+      label: 'Review stakeholder start-date confirmation email',
+      status: 'pending' as const,
+      draftEmail: `Subject: Start Date Realignment Confirmation Needed - Sofia Martinez
+
+Hi Team,
+
+Sofia Martinez has requested a start date realignment. Please confirm the updated start date so we can proceed with downstream system updates.
+
+Requested action:
+- Confirm the final agreed start date.
+- Reply in this thread once confirmed.
+
+After confirmation is received, we will update CRM, SuccessFactors, EC, and Payroll.
+
+Thank you,
+Onboarding Operations`,
+    },
+    {
+      id: 'step-2-stakeholder-confirmation-send',
+      label: 'Send stakeholder confirmation email',
       status: 'pending' as const,
     },
   ]
@@ -328,6 +345,12 @@ export function getFollowUpCompletionResponse(
     if (candidate.id === 'case-008') {
       return {
         text: `**Medical follow-up email sent** to ${candidate.candidateName}. The case remains in critical watch until medical completion is confirmed.`,
+        delayMs: 600,
+      }
+    }
+    if (candidate.id === 'case-010') {
+      return {
+        text: `**Stakeholder email sent and confirmation received** for ${candidate.candidateName}. Continue with **Action with AI** to update CRM, SuccessFactors, EC, and Payroll.`,
         delayMs: 600,
       }
     }
